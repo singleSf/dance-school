@@ -51,6 +51,8 @@ export default {
                 .then((_json) => {
                     if (_json.user) {
                         this.User.setUser(_json.user);
+
+                        this.$router.push(this.Router.routes.home.office.office);
                     }
                 });
         },

@@ -1,9 +1,8 @@
 <template lang="pug">
 AppFlashMessenger
 
-main(v-if="isReady")
-    Office(v-if="User.isAuth")
-    Auth(v-else)
+main
+    router-view
 </template>
 
 <style lang="stylus" scoped>
@@ -12,28 +11,19 @@ main(v-if="isReady")
 <script>
 'use strict';
 
-import Auth   from '../auth/index';
-import Office from '../office/index';
-
 export default {
-    components: {
-        Auth,
-        Office,
-    },
-    data() {
-        return {
-            isReady: false,
-        };
-    },
     beforeCreate() {
         this.Http
             .request(this.Router.uri.user.get)
             .then((_json) => {
+                let route = this.Router.routes.home.auth;
                 if (_json.user) {
                     this.User.setUser(_json.user);
+
+                    route = this.Router.routes.home.office.office;
                 }
 
-                this.isReady = true;
+                this.$router.push(route);
             });
     },
 };

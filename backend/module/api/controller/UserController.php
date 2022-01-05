@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace module\api\controller;
 
 use module\api\helper\AbstractTool;
-use sf\phpmvc\entity\UserEntity;
 
 /**
  * Class UserController
@@ -20,7 +19,11 @@ class UserController extends AbstractController
     {
         $user = AbstractTool::getAuthUserService()->getUser();
         if ($user) {
-            $user = $this->__getUserArray($user);
+            $user = [
+                'id'    => $user->getId(),
+                'login' => $user->getLogin(),
+                'title' => $user->getTitle(),
+            ];
         }
 
         return [
@@ -53,28 +56,10 @@ class UserController extends AbstractController
 
         if ($user) {
             AbstractTool::getAuthUserService()->setUser($user->getId());
-            $user = $this->__getUserArray($user);
         } else {
             AbstractTool::getFlashMessageService()->addErrorMessage('Пользователь не найден!');
         }
 
-        return [
-            'success' => true,
-            'user'    => $user,
-        ];
-    }
-
-    /**
-     * @param UserEntity $_user
-     *
-     * @return array
-     */
-    private function __getUserArray(UserEntity $_user): array
-    {
-        return [
-            'id'    => $_user->getId(),
-            'login' => $_user->getLogin(),
-            'title' => $_user->getTitle(),
-        ];
+        return $this->getGetAction();
     }
 }
