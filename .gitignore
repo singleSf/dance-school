@@ -1,7 +1,6 @@
 .idea
 .git
 
-backend/composer.lock
 backend/vendor
 backend/config/*.json
 backend/log/*.log
