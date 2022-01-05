@@ -1,0 +1,44 @@
+{
+  "database": {
+    "host": "localhost",
+    "name": "SF_PHP-MVC",
+    "user": "root",
+    "password": "root",
+    "charset": "UTF8",
+    "offset": "+03:00"
+  },
+  "response": {
+    "charset": "UTF-8",
+    "cors"   : {
+      "uri": "http://127.0.7.10:3002"
+    }
+  },
+  "email": {
+    "smtp": {
+      "host": "smtp.jino.ru",
+      "port": 587,
+      "auth": true,
+      "debug": 0,
+      "charset": "UTF-8",
+      "type": "text/html",
+      "encode": "base64",
+      "protocol": "tls",
+      "name": "Отображаемое имя"
+    },
+    "imap": {
+      "host": "mail.jino.ru",
+      "port": 143
+    },
+    "user": "mail@mail.ru",
+    "password": "password"
+  },
+  "crypt"   : {
+    "database": {
+      "secretKey"   : "",
+      "cryptMethod" : "AES-256-CBC",
+      "hashMethod"  : "sha256",
+      "passwordCost": 12
+    }
+  },
+  "isLocal": true
+}

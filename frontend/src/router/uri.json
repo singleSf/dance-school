@@ -1,0 +1,16 @@
+{
+  "user": {
+    "get" : {
+      "method": "GET",
+      "uri"   : "/api/user/get"
+    },
+    "auth": {
+      "method": "POST",
+      "uri"   : "/api/user/auth"
+    },
+    "logout": {
+      "method": "GET",
+      "uri"   : "/api/user/logout"
+    }
+  }
+}

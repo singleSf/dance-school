@@ -1,0 +1,26 @@
+{
+  "name"             : "sf/php-mvc-example",
+  "description"      : "",
+  "minimum-stability": "dev",
+  "prefer-stable"    : true,
+  "config"           : {
+    "optimize-autoloader": true
+  },
+  "repositories"     : [
+    {
+      "type": "git",
+      "url" : "git@github.com:singleSf/mvc-backend.git"
+    }
+  ],
+  "require"          : {
+    "php"         : ">=7.2.0",
+    "ext-json"    : "*",
+    "ext-mbstring": "*",
+    "sf/php-mvc"  : "dev-master"
+  },
+  "autoload"         : {
+    "psr-4": {
+      "module\\": "module/"
+    }
+  }
+}

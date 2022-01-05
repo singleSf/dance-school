@@ -1,0 +1,75 @@
+AddDefaultCharset "UTF-8"
+php_value default_charset "UTF-8"
+Options -Indexes
+######################
+php_value include_path "/var/www/sf/dance-school/backend/"
+######################
+php_value display_errors 1
+php_value error_reporting -1
+
+php_flag log_errors On
+php_value loglevel "debug"
+php_value error_log "/var/www/sf/dance-school/backend/log/error.log"
+php_value custom_log "/var/www/sf/dance-school/backend/log/custom.log"
+######################
+DirectoryIndex "index.html"
+ErrorDocument 404 "/"
+ErrorDocument 403 "/"
+######################
+php_flag allow_url_fopen Off
+php_flag allow_url_include Off
+######################
+RewriteEngine On
+RewriteRule ^favicon.ico$ /asset/icon/favicon.ico [R=301,L]
+RewriteCond %{REQUEST_URI} !^/(asset|css|js)/.*$
+RewriteRule / index.php [QSA,L]
+######################
+SetEnvIfNoCase User-Agent ^$ bad_bot
+<Limit GET POST HEAD PUT DELETE>
+    Order Allow,Deny
+    Allow from all
+    Deny from env=bad_bot
+</Limit>
+######################
+<FilesMatch "^\.">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+######################
+<FilesMatch "\.(gif|jpg|jpe|jpeg|png|ico|js|css|scss|map|woff|woff2|eot|svg|otf|ttf)$">
+    Header set Cache-Control "max-age=31536000"
+</FilesMatch>
+######################
+AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+######################
+php_value memory_limit 90M
+php_value upload_max_filesize 15M
+php_value post_max_filesize 15M
+php_value post_max_size 15M
+php_value max_input_vars 5000
+php_value max_input_nesting_level 10
+######################
+php_value session.auto_start On
+php_value session.gc_maxlifetime 21600
+php_value session.cookie_lifetime 21600
+php_value session.name "SF_PHP-MVC"
+php_value session.use_cookies On
+php_value session.use_only_cookies On
+php_value session.use_trans_sid Off
+php_value session.hash_bits_per_character 6
+php_value session.hash_function 1
+php_value session.cookie_path "/"
+php_value session.cookie_httponly On
+######################
+AddType image/x-icon .ico
+AddType image/gif .gif
+AddType image/jpeg .jpeg
+AddType image/png .png
+AddType application/javascript .js
+AddType text/css .css
+AddType application/font-woff .woff
+AddType application/font-sfnt .ttf
+AddType application/font-sfnt .otf
+AddType image/svg+xml .svg
+AddType application/vnd.ms-fontobject .eot
+######################

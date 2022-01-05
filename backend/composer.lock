@@ -1,0 +1,53 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "c926f7943b6a8f9f64d7055c2626c92d",
+    "packages": [
+        {
+            "name": "sf/php-mvc",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:singleSf/mvc-backend.git",
+                "reference": "cb6702086591c42759a918cdcf7535ed018bb8cb"
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "ext-pdo": "*",
+                "php": ">=7.2.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "sf\\phpmvc\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP MVC",
+            "time": "2022-01-05T17:44:27+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "sf/php-mvc": 20
+    },
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.2.0",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
+}

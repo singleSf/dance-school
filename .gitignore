@@ -1,0 +1,12 @@
+.idea
+.git
+
+backend/vendor
+backend/config/*.json
+backend/log/*.log
+
+frontend/node_modules
+frontend/coverage
+frontend/analyze
+frontend/dist
+frontend/.env
