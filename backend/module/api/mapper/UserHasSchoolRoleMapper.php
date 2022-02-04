@@ -5,12 +5,13 @@ namespace module\api\mapper;
 
 use module\api\entity\SchoolEntity;
 use module\api\entity\UserHasSchoolRoleEntity;
-use module\api\helper\AbstractToolHelper;
-use sf\phpmvc\entity\UserEntity;
+use module\api\mapper\SchoolMapper\RoleMapper\UserTraitMapper;
 use sf\phpmvc\mapper\AbstractMapper;
 
 class UserHasSchoolRoleMapper extends AbstractMapper
 {
+    use UserTraitMapper;
+
     /**
      * @param int $_userId
      * @param int $_roleId
@@ -59,40 +60,5 @@ class UserHasSchoolRoleMapper extends AbstractMapper
         $has->setSchoolRoleId($_roleId);
 
         $this->saveEntity($has);
-    }
-
-    /**
-     * @param SchoolEntity[] $_schools
-     */
-    public function setupUsers(array $_schools): void
-    {
-        /** @var UserHasSchoolRoleEntity[] $hases */
-        $hases = $this->fetchAll(['school_id' => array_keys($_schools)]);
-
-        if (empty($hases)) {
-            return;
-        }
-        $userMapper       = AbstractToolHelper::getUserMapper();
-        $schoolRoleMapper = AbstractToolHelper::getSchoolRoleMapper();
-
-        $userIds       = [];
-        $schoolRoleIds = [];
-        foreach ($hases as $has) {
-            $userIds[$has->getUserId()]             = $has->getUserId();
-            $schoolRoleIds[$has->getSchoolRoleId()] = $has->getSchoolRoleId();
-        }
-
-        /** @var UserEntity[] $users */
-        $users = $userMapper->fetchAll(['id' => $userIds]);
-        /** @var SchoolEntity\RoleEntity[] $schoolRoles */
-        $schoolRoles = $schoolRoleMapper->fetchAll(['id' => $schoolRoleIds]);
-
-        foreach ($hases as $has) {
-            $school     = $_schools[$has->getSchoolId()];
-            $user       = $users[$has->getUserId()];
-            $schoolRole = $schoolRoles[$has->getSchoolRoleId()];
-
-            $school->addUser($user, $schoolRole->getType());
-        }
     }
 }
