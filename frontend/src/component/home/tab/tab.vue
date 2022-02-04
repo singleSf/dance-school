@@ -8,7 +8,6 @@ li.tab
 <style lang="stylus" scoped>
 .tab
     flex-basis 175px
-    padding 5px
     background-color var(--background-color-tab)
     text-align center
     border-decoration(var(--component-global-paginator-border-color), var(--component-global-paginator-border-radius))
@@ -19,6 +18,7 @@ li.tab
 
     .link
         display block
+        padding 5px
 </style>
 
 <script>
