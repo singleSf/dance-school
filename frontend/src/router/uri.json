@@ -1,16 +1,30 @@
 {
-  "user": {
-    "get" : {
+  "user"  : {
+    "get"   : {
       "method": "GET",
       "uri"   : "/api/user/get"
     },
-    "auth": {
+    "auth"  : {
       "method": "POST",
       "uri"   : "/api/user/auth"
     },
     "logout": {
       "method": "GET",
       "uri"   : "/api/user/logout"
+    }
+  },
+  "school": {
+    "list": {
+      "method": "GET",
+      "uri"   : "/api/school/list"
+    },
+    "get" : {
+      "method": "POST",
+      "uri"   : "/api/school/get"
+    },
+    "save": {
+      "method": "POST",
+      "uri"   : "/api/school/save"
     }
   }
 }

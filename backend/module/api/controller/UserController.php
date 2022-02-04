@@ -3,41 +3,26 @@ declare(strict_types=1);
 
 namespace module\api\controller;
 
-use module\api\helper\AbstractTool;
+use module\api\helper\AbstractToolHelper;
 
-/**
- * Class UserController
- *
- * @package module\api\controller
- */
 class UserController extends AbstractController
 {
     /**
-     * @return array
+     * UserController constructor.
      */
-    public function getGetAction(): array
+    public function __construct()
     {
-        $user = AbstractTool::getAuthUserService()->getUser();
-        if ($user) {
-            $user = [
-                'id'    => $user->getId(),
-                'login' => $user->getLogin(),
-                'title' => $user->getTitle(),
-            ];
-        }
+        $this->isCheckUserAuth = false;
 
-        return [
-            'success' => true,
-            'user'    => $user,
-        ];
+        parent::__construct();
     }
 
     /**
      * @return array
      */
-    public function logoutGetAction(): array
+    public function logoutGETAction(): array
     {
-        AbstractTool::getAuthUserService()->unsetUser();
+        AbstractToolHelper::getAuthUserService()->unsetUser();
 
         return [
             'success' => true,
@@ -50,16 +35,36 @@ class UserController extends AbstractController
      *
      * @return array
      */
-    public function authPostAction(array $_get, array $_post): array
+    public function authPOSTAction(array $_get, array $_post): array
     {
-        $user = AbstractTool::getUserMapper()->getActiveUser($_post['login'], $_post['password']);
+        $user = AbstractToolHelper::getUserMapper()->getActiveUser($_post['login'], $_post['password']);
 
         if ($user) {
-            AbstractTool::getAuthUserService()->setUser($user->getId());
+            AbstractToolHelper::getAuthUserService()->setUser($user->getId());
         } else {
-            AbstractTool::getFlashMessageService()->addErrorMessage('Пользователь не найден!');
+            AbstractToolHelper::getFlashMessageService()->addErrorMessage('Пользователь не найден!');
         }
 
         return $this->getGetAction();
+    }
+
+    /**
+     * @return array
+     */
+    public function getGETAction(): array
+    {
+        $user = AbstractToolHelper::getAuthUserService()->getUser();
+        if ($user) {
+            $user = [
+                'id'    => $user->getId(),
+                'login' => $user->getLogin(),
+                'title' => $user->getTitle(),
+            ];
+        }
+
+        return [
+            'success' => true,
+            'user'    => $user,
+        ];
     }
 }

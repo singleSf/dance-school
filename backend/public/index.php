@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use sf\phpmvc\controller\ResponseController;
-use sf\phpmvc\helper\AbstractTool;
+use sf\phpmvc\helper\AbstractToolHelper;
 
 define('ROOT_PATH', dirname(__DIR__));
 chdir(ROOT_PATH);
@@ -21,7 +21,7 @@ if (!file_exists($vendorPath)) {
 
 require_once $vendorPath;
 
-AbstractTool::loadConfig(ROOT_PATH.'/config/backend.json');
+AbstractToolHelper::loadConfig(ROOT_PATH.'/config/backend.json');
 
 $response = new ResponseController();
 $response->run();

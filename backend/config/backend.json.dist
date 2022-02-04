@@ -4,7 +4,7 @@
     "name": "SF_PHP-MVC",
     "user": "root",
     "password": "root",
-    "charset": "UTF8",
+    "charset": "utf8mb4",
     "offset": "+03:00"
   },
   "response": {

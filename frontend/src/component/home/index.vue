@@ -6,6 +6,7 @@ main
 </template>
 
 <style lang="stylus" scoped>
+@import '../../style/app.styl'
 </style>
 
 <script>
@@ -16,14 +17,11 @@ export default {
         this.Http
             .request(this.Router.uri.user.get)
             .then((_json) => {
-                let route = this.Router.routes.home.auth;
                 if (_json.user) {
                     this.User.setUser(_json.user);
-
-                    route = this.Router.routes.home.office.office;
+                } else {
+                    this.$router.push(this.Router.routes.home.auth);
                 }
-
-                this.$router.push(route);
             });
     },
 };

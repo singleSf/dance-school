@@ -1,44 +1,60 @@
 <template lang="pug">
-div
-    ul
-        li
-            router-link(:to="Router.routes.home.office.school") Школы
-        li
-            router-link(:to="Router.routes.home.office.hall") Залы
-        li
-            ul
-                li
-                    router-link(:to="Router.routes.home.office.direction") Направления
-                li
-                    router-link(:to="Router.routes.home.office.subscription") Абонементы
-        li
-            ul
-                li Участники
-                li Ученики
-                li Преподаватели
-                li Администраторы
-        li Посещения
-        li Отчетность
-        li(@click="logout") Выйти
+Tabs(
+    :tabs="tabs"
+)
+.office(v-if="isReady")
+    h1.title {{Page.meta.title}}
     router-view
 </template>
 
 <style lang="stylus" scoped>
+.office
+    padding 25px
+
+    h1.title
+        margin-bottom 25px
+        text-align center
 </style>
 
 <script>
 'use strict';
 
-export default {
-    methods: {
-        logout() {
-            this.Http
-                .request(this.Router.uri.user.logout)
-                .then(() => {
-                    this.User.setUser({});
+import Tabs    from '../tab/index';
+import {unref} from 'vue';
 
-                    this.$router.push(this.Router.routes.home.auth);
-                });
+export default {
+    components: {
+        Tabs,
+    },
+    data() {
+        return {
+            tabs: [
+                {
+                    id   : 1,
+                    title: 'Школы',
+                    route: this.Router.routes.home.office.school,
+                },
+                {
+                    id   : 2,
+                    title: 'Посещения',
+                    route: '',
+                },
+                {
+                    id   : 3,
+                    title: 'Отчетность',
+                    route: '',
+                },
+                {
+                    id   : 4,
+                    title: 'Выйти',
+                    route: this.Router.routes.home.logout,
+                },
+            ],
+        };
+    },
+    computed  : {
+        isReady() {
+            return !unref(this.$router.currentRoute).meta.isAuth || this.User.isAuth;
         },
     },
 };

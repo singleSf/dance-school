@@ -1,29 +1,36 @@
 <template lang="pug">
-AppFormForm(
+AppFormForm.form(
     v-model:isValid="form.isValid"
 )
-    .columns
-        AppFormInput(
-            type="text"
-            placeholder="Логин"
-            v-model:model="form.login"
-            :isRequired="true"
-        ) Ваш логин
-    .columns
-        AppFormInput(
-            type="password"
-            placeholder="Пароль"
-            v-model:model="form.password"
-            :isRequired="true"
-        )
-    .columns
-        AppFormButtonSubmit(
-            :isDisabled="!form.isValid"
-            @click="eventSendForm()"
-        ) Отправить форму
+    AppFormInput.input(
+        type="text"
+        placeholder="Логин"
+        v-model:model="form.login"
+        :isRequired="true"
+    ) Ваш логин
+    AppFormInput.input(
+        type="password"
+        placeholder="Пароль"
+        v-model:model="form.password"
+        :isRequired="true"
+    )
+    AppFormButtonSubmit.submit(
+        :isDisabled="!form.isValid"
+        @click="eventSendForm()"
+    ) Авторизоваться
 </template>
 
 <style lang="stylus" scoped>
+.form
+    margin auto
+    width 300px
+
+    .input
+        margin-top 5px
+
+    .submit
+        margin-top 15px
+        width 100%
 </style>
 
 <script>

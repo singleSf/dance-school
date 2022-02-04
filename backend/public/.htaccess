@@ -52,7 +52,7 @@ php_value max_input_nesting_level 10
 php_value session.auto_start On
 php_value session.gc_maxlifetime 21600
 php_value session.cookie_lifetime 21600
-php_value session.name "SF_PHP-MVC"
+php_value session.name "SF_DANCE-SCHOOl"
 php_value session.use_cookies On
 php_value session.use_only_cookies On
 php_value session.use_trans_sid Off

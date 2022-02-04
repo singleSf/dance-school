@@ -5,7 +5,8 @@ export default [
         name     : 'home',
         path     : '/',
         meta     : {
-            title: 'Школа танцев',
+            title : 'Школа танцев',
+            isAuth: false,
         },
         component: () => import('@component/home/index'),
         children : [
@@ -13,15 +14,26 @@ export default [
                 name     : 'auth',
                 path     : 'auth',
                 meta     : {
-                    title: 'Авторизация',
+                    title : 'Авторизация',
+                    isAuth: false,
                 },
                 component: () => import('@component/home/auth/index'),
+            },
+            {
+                name     : 'logout',
+                path     : 'logout',
+                meta     : {
+                    title : 'Выход',
+                    isAuth: false,
+                },
+                component: () => import('@component/home/logout/index'),
             },
             {
                 name     : 'office',
                 path     : 'office',
                 meta     : {
-                    title: 'Школа танцев',
+                    title : 'Личный кабинет',
+                    isAuth: true,
                 },
                 component: () => import('@component/home/office/index'),
                 children : [
@@ -29,33 +41,22 @@ export default [
                         path     : 'school',
                         name     : 'school',
                         meta     : {
-                            title: 'Школы',
+                            title : 'Список школ',
+                            isAuth: true,
                         },
                         component: () => import('@component/home/office/school/index'),
                     },
                     {
-                        path     : 'hall',
-                        name     : 'hall',
+                        path     : 'school/:id(\\d+)',
+                        name     : 'schoolCard',
                         meta     : {
-                            title: 'Залы',
+                            title : 'Карточка школы',
+                            isAuth: true,
                         },
-                        component: () => import('@component/home/office/hall/index'),
-                    },
-                    {
-                        path     : 'direction',
-                        name     : 'direction',
-                        meta     : {
-                            title: 'Направления',
-                        },
-                        component: () => import('@component/home/office/direction/index'),
-                    },
-                    {
-                        path     : 'subscription',
-                        name     : 'subscription',
-                        meta     : {
-                            title: 'Уровни и цены',
-                        },
-                        component: () => import('@component/home/office/subscription/index'),
+                        props    : (_route) => ({
+                            id: Number(_route.params.id),
+                        }),
+                        component: () => import('@component/home/office/school/card/index'),
                     },
                 ],
             },

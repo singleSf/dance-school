@@ -3,7 +3,9 @@
 import CreateApp from 'sf-mvc-frontend';
 
 import RouterRoute from './router/route';
-import RouterUri from './router/uri';
+import RouterUri   from './router/uri';
+
+import './font-awesome-icon';
 
 export default (async () => {
     const {app, router} = await CreateApp;
