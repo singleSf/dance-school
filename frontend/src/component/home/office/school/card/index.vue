@@ -1,5 +1,5 @@
 <template lang="pug">
-div {{school}}
+pre {{school}}
 </template>
 
 <style lang="stylus" scoped>
@@ -50,7 +50,7 @@ export default {
             if (!window.confirm('Удалить школу?')) {
                 return;
             }
-            _school.isDelete = true;
+            _school.isDeleted = true;
 
             const data = {
                 school: _school,

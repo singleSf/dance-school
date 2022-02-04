@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace module\api\mapper\School;
+namespace module\api\mapper\SchoolMapper;
 
-use module\api\entity\School\HallEntity;
 use module\api\entity\SchoolEntity;
+use module\api\entity\SchoolEntity\HallEntity;
 use sf\phpmvc\mapper\AbstractMapper;
-use sf\phpmvc\mapper\action\SelectAction;
 
 class HallMapper extends AbstractMapper
 {
@@ -15,10 +14,8 @@ class HallMapper extends AbstractMapper
      */
     public function setupHalls(array $_schools): void
     {
-        $select = new SelectAction($this->getTable());
-        $select->getWhere()->in('school_id', array_keys($_schools));
         /** @var HallEntity[] $halls */
-        $halls = $this->fetchAll($select);
+        $halls = $this->fetchAll(['school_id' => array_keys($_schools)]);
 
         foreach ($halls as $hall) {
             $school = $_schools[$hall->getSchoolId()];

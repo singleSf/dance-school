@@ -6,17 +6,16 @@ namespace module\api\mapper;
 use module\api\entity\SchoolEntity;
 use module\api\helper\AbstractToolHelper;
 use sf\phpmvc\mapper\AbstractMapper;
-use sf\phpmvc\mapper\action\SelectAction;
 
 class SchoolMapper extends AbstractMapper
 {
     /**
-     * @param int      $_userId
-     * @param int|null $_schoolId
+     * @param int $_userId
+     * @param int $_schoolId
      *
      * @return SchoolEntity|null
      */
-    public function getSchoolByAdmin(int $_userId, int $_schoolId = null): ?SchoolEntity
+    public function getSchoolByAdmin(int $_userId, int $_schoolId): ?SchoolEntity
     {
         /** @var SchoolEntity[] $schools */
         $schools = $this->getSchoolListByAdmin($_userId);
@@ -32,18 +31,24 @@ class SchoolMapper extends AbstractMapper
     public function getSchoolListByAdmin(int $_userId): array
     {
         $schoolRoleMapper        = AbstractToolHelper::getSchoolRoleMapper();
+        $schoolHallMapper        = AbstractToolHelper::getSchoolHallMapper();
+        $schoolDirectionMapper   = AbstractToolHelper::getSchoolDirectionMapper();
         $userHasSchoolRoleMapper = AbstractToolHelper::getUserHasSchoolRoleMapper();
-        $roleAdmin               = $schoolRoleMapper->getRoleAdmin();
+
+        $roleAdmin = $schoolRoleMapper->getRoleByType(SchoolEntity\RoleEntity::TYPE_ADMIN);
 
         $schoolIds = $userHasSchoolRoleMapper->getSchoolIds($_userId, $roleAdmin->getId());
         if (empty($schoolIds)) {
             return [];
         }
 
-        $select = new SelectAction($this->getTable());
-        $select->getWhere()->in('id', $schoolIds);
+        $schools = $this->fetchAll(['id' => $schoolIds]);
 
-        return $this->fetchAll($select);
+        $schoolHallMapper->setupHalls($schools);
+        $schoolDirectionMapper->setupDirections($schools);
+        $userHasSchoolRoleMapper->setupUsers($schools);
+
+        return $schools;
     }
 
     /**

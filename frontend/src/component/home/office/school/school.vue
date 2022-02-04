@@ -5,9 +5,9 @@
         .content {{school.id}}
     .title
         .content {{school.title}}
-    .count
+    .count(v-if="false")
         .label Залы:
-        .content {{school.count.hole}}
+        .content {{school.count.hall}}
     .count
         .label Направления:
         .content {{school.count.direction}}
@@ -17,6 +17,9 @@
     .count
         .label Преподаватели:
         .content {{school.count.teacher}}
+    .count
+        .label Администраторы:
+        .content {{school.count.admin}}
     .count
         .label Абонементы:
         .content {{school.count.subscription}}

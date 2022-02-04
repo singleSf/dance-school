@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace module\api\entity\School;
+namespace module\api\entity\SchoolEntity;
 
 use module\api\entity\SchoolTraitEntity;
 use sf\phpmvc\entity\AbstractEntity;

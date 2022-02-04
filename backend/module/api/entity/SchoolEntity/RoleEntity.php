@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace module\api\entity\School;
+namespace module\api\entity\SchoolEntity;
 
 use sf\phpmvc\entity\AbstractEntity;
 use sf\phpmvc\entity\ParentIdTraitEntity;
@@ -16,4 +16,9 @@ class RoleEntity extends AbstractEntity
     public const TYPE_STUDENT = 1;
     public const TYPE_TEACHER = 2;
     public const TYPE_ADMIN   = 3;
+    public const TYPES        = [
+        self::TYPE_STUDENT,
+        self::TYPE_TEACHER,
+        self::TYPE_ADMIN,
+    ];
 }

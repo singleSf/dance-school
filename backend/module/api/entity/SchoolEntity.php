@@ -3,20 +3,31 @@ declare(strict_types=1);
 
 namespace module\api\entity;
 
-use module\api\entity\School\DirectionEntity;
-use module\api\entity\School\HallEntity;
+use module\api\entity\SchoolEntity\DirectionEntity;
+use module\api\entity\SchoolEntity\HallEntity;
+use module\api\entity\SchoolEntity\RoleEntity;
 use sf\phpmvc\entity\AbstractEntity;
 use sf\phpmvc\entity\TitleTraitEntity;
+use sf\phpmvc\entity\UserEntity;
 
 class SchoolEntity extends AbstractEntity
 {
     use TitleTraitEntity;
+    use RoleEntity\UserTraitEntity;
 
     /** @var HallEntity[] */
     private $halls = [];
 
     /** @var DirectionEntity[] */
     private $directions = [];
+
+    /**
+     * SchoolEntity constructor.
+     */
+    public function __construct()
+    {
+      $this->setupTypesUsers();
+    }
 
     /**
      * @return HallEntity[]

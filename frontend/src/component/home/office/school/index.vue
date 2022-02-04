@@ -4,10 +4,11 @@
         .row
             .id #
             .title Название школы
-            .count Залы
+            .count(v-if="false") Залы
             .count Направления
             .count Ученики
             .count Преподаватели
+            .count Администраторы
             .count Абонементы
     .list.body
         SchoolComponent(

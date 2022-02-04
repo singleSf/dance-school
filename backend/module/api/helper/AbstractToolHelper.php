@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace module\api\helper;
 
-use module\api\mapper\School\DirectionMapper as SchoolDirectionMapper;
-use module\api\mapper\School\HallMapper as SchoolHallMapper;
-use module\api\mapper\School\RoleMapper as SchoolRoleMapper;
 use module\api\mapper\SchoolMapper;
 use module\api\mapper\UserHasSchoolRoleMapper;
 use sf\phpmvc\mapper\AbstractDb;
@@ -21,27 +18,43 @@ abstract class AbstractToolHelper extends \sf\phpmvc\helper\AbstractToolHelper
     }
 
     /**
-     * @return SchoolRoleMapper
+     * @return SchoolMapper\RoleMapper
      */
-    static public function getSchoolRoleMapper(): SchoolRoleMapper
+    static public function getSchoolRoleMapper(): SchoolMapper\RoleMapper
     {
-        return AbstractDb::getMapper(SchoolRoleMapper::class);
+        return AbstractDb::getMapper(SchoolMapper\RoleMapper::class);
     }
 
     /**
-     * @return SchoolHallMapper
+     * @return SchoolMapper\HallMapper
      */
-    static public function getSchoolHallMapper(): SchoolHallMapper
+    static public function getSchoolHallMapper(): SchoolMapper\HallMapper
     {
-        return AbstractDb::getMapper(SchoolHallMapper::class);
+        return AbstractDb::getMapper(SchoolMapper\HallMapper::class);
     }
 
     /**
-     * @return SchoolDirectionMapper
+     * @return SchoolMapper\DirectionMapper
      */
-    static public function getSchoolDirectionMapper(): SchoolDirectionMapper
+    static public function getSchoolDirectionMapper(): SchoolMapper\DirectionMapper
     {
-        return AbstractDb::getMapper(SchoolDirectionMapper::class);
+        return AbstractDb::getMapper(SchoolMapper\DirectionMapper::class);
+    }
+
+    /**
+     * @return SchoolMapper\DirectionMapper\SubscriptionMapper
+     */
+    static public function getSchoolDirectionSubscriptionMapper(): SchoolMapper\DirectionMapper\SubscriptionMapper
+    {
+        return AbstractDb::getMapper(SchoolMapper\DirectionMapper\SubscriptionMapper::class);
+    }
+
+    /**
+     * @return SchoolMapper\DirectionMapper\SubscriptionMapper\HasUserMapper
+     */
+    static public function getSchoolDirectionSubscriptionHasUserMapper(): SchoolMapper\DirectionMapper\SubscriptionMapper\HasUserMapper
+    {
+        return AbstractDb::getMapper(SchoolMapper\DirectionMapper\SubscriptionMapper\HasUserMapper::class);
     }
 
     /**
