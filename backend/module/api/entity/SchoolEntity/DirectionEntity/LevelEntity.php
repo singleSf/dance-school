@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace module\api\entity\SchoolEntity\DirectionEntity;
 
-use module\api\entity\SchoolEntity\RoleEntity;
+use module\api\entity\SchoolEntity\DirectionEntity\LevelEntity\PriceEntity;
+use module\api\entity\SchoolEntity\DirectionEntity\LevelEntity\TeacherEntity;
 use sf\phpmvc\entity\AbstractEntity;
 
-class SubscriptionEntity extends AbstractEntity
+class LevelEntity extends AbstractEntity
 {
-    use RoleEntity\UserTraitEntity;
     public const LEVEL_JUNIOR     = 1;
     public const LEVEL_MIDDLE     = 2;
     public const LEVEL_SENIOR     = 3;
@@ -21,10 +21,11 @@ class SubscriptionEntity extends AbstractEntity
     /** @var int */
     protected $level;
 
-    public function __construct()
-    {
-        $this->setupTypesUsers();
-    }
+    /** @var PriceEntity[] */
+    private $prices = [];
+
+    /** @var TeacherEntity[] */
+    private $teachers = [];
 
     /**
      * @return int
@@ -80,5 +81,53 @@ class SubscriptionEntity extends AbstractEntity
         }
 
         return 'Неизвестно';
+    }
+
+    /**
+     * @return PriceEntity[]
+     */
+    public function getPrices(): array
+    {
+        return $this->prices;
+    }
+
+    /**
+     * @param PriceEntity[] $_prices
+     */
+    public function setPrices(array $_prices): void
+    {
+        $this->prices = $_prices;
+    }
+
+    /**
+     * @param PriceEntity $_price
+     */
+    public function addPrice(PriceEntity $_price): void
+    {
+        $this->prices[$_price->getId()] = $_price;
+    }
+
+    /**
+     * @return TeacherEntity[]
+     */
+    public function getTeachers(): array
+    {
+        return $this->teachers;
+    }
+
+    /**
+     * @param TeacherEntity[] $_teachers
+     */
+    public function setTeachers(array $_teachers): void
+    {
+        $this->teachers = $_teachers;
+    }
+
+    /**
+     * @param TeacherEntity $_teacher
+     */
+    public function addTeacher(TeacherEntity $_teacher): void
+    {
+        $this->teachers[$_teacher->getId()] = $_teacher;
     }
 }

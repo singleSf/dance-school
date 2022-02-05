@@ -12,30 +12,30 @@ class DirectionEntity extends AbstractEntity
     use TitleTraitEntity;
     use SchoolTraitEntity;
 
-    /** @var DirectionEntity\SubscriptionEntity[] */
-    private $subscriptions = [];
+    /** @var DirectionEntity\LevelEntity[] */
+    private $levels = [];
 
     /**
-     * @return DirectionEntity\SubscriptionEntity[]
+     * @return DirectionEntity\LevelEntity[]
      */
-    public function getSubscriptions(): array
+    public function getLevels(): array
     {
-        return $this->subscriptions;
+        return $this->levels;
     }
 
     /**
-     * @param DirectionEntity\SubscriptionEntity[] $_subscriptions
+     * @param DirectionEntity\LevelEntity[] $_levels
      */
-    public function setSubscriptions(array $_subscriptions): void
+    public function setLevels(array $_levels): void
     {
-        $this->subscriptions = $_subscriptions;
+        $this->levels = $_levels;
     }
 
     /**
-     * @param DirectionEntity\SubscriptionEntity $_subscription
+     * @param DirectionEntity\LevelEntity $_level
      */
-    public function addSubscriptions(DirectionEntity\SubscriptionEntity $_subscription): void
+    public function addLevel(DirectionEntity\LevelEntity $_level): void
     {
-        $this->subscriptions[$_subscription->getId()] = $_subscription;
+        $this->levels[$_level->getId()] = $_level;
     }
 }

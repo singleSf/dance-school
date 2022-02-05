@@ -24,12 +24,12 @@ class SchoolController extends AbstractController
                 'id'    => $school->getId(),
                 'title' => $school->getTitle(),
                 'count' => [
-                    'hall'         => count($school->getHalls()),
-                    'direction'    => count($school->getDirections()),
-                    'student'      => count($school->getStudents()),
-                    'teacher'      => count($school->getTeachers()),
-                    'admin'        => count($school->getAdmins()),
-                    'subscription' => 0,
+                    'hall'      => count($school->getHalls()),
+                    'direction' => count($school->getDirections()),
+                    'student'   => count($school->getStudents()),
+                    'teacher'   => count($school->getTeachers()),
+                    'admin'     => count($school->getAdmins()),
+                    'level'     => 0,
                 ],
             ];
         }
@@ -76,38 +76,43 @@ class SchoolController extends AbstractController
                 }
 
                 foreach ($school->getDirections() as $direction) {
-                    $subscriptions = [];
-                    foreach ($direction->getSubscriptions() as $subscription) {
-                        $students = [];
+                    $levels = [];
+                    foreach ($direction->getLevels() as $level) {
+                        $prices = [];
+                        foreach ($level->getPrices() as $price) {
+                            $prices[$price->getId()] = [
+                                'id'           => $price->getId(),
+                                'count_lesson' => $price->getCountLesson(),
+                                'count_skip'   => $price->getCountSkip(),
+                                'price'        => $price->getPrice(),
+                            ];
+                        }
+
                         $teachers = [];
-
-                        foreach ($subscription->getStudents() as $student) {
-                            $students[$student->getId()] = [
-                                'id'    => $student->getId(),
-                                'title' => $student->getTitle(),
-                            ];
-                        }
-
-                        foreach ($subscription->getTeachers() as $teacher) {
+                        foreach ($level->getTeachers() as $teacher) {
                             $teachers[$teacher->getId()] = [
-                                'id'    => $teacher->getId(),
-                                'title' => $teacher->getTitle(),
+                                'id'   => $teacher->getId(),
+                                'user' => [
+                                    'id'    => $teacher->getUser()->getId(),
+                                    'title' => $teacher->getUser()->getTitle(),
+                                ],
                             ];
                         }
 
-                        $subscriptions[$subscription->getId()] = [
-                            'id'       => $subscription->getId(),
-                            'level'    => $subscription->getLevel(),
-                            'title'    => $subscription->getLevelTitle(),
-                            'students' => $students,
-                            'teachers' => $teachers,
+                        $levels[$level->getId()] = [
+                            'id'       => $level->getId(),
+                            'level'    => $level->getLevel(),
+                            'title'    => $level->getLevelTitle(),
+                            'prices'   => $prices,
+                            'teaches'  => $teachers,
+                            'students' => [],
                         ];
                     }
 
                     $schoolArray['directions'][$direction->getId()] = [
-                        'id'            => $direction->getId(),
-                        'title'         => $direction->getTitle(),
-                        'subscriptions' => $subscriptions,
+                        'id'     => $direction->getId(),
+                        'title'  => $direction->getTitle(),
+                        'levels' => $levels,
                     ];
                 }
 

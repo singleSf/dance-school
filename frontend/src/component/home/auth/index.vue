@@ -7,12 +7,14 @@ AppFormForm.form(
         placeholder="Логин"
         v-model:model="form.login"
         :isRequired="true"
+        :min="6"
     ) Ваш логин
     AppFormInput.input(
         type="password"
         placeholder="Пароль"
         v-model:model="form.password"
         :isRequired="true"
+        :min="6"
     )
     AppFormButtonSubmit.submit(
         :isDisabled="!form.isValid"

@@ -15,11 +15,14 @@ class DirectionMapper extends AbstractMapper
      */
     public function setupDirections(array $_schools): void
     {
+        if (empty($_schools)) {
+            return;
+        }
         /** @var DirectionEntity[] $directions */
         $directions = $this->fetchAll(['school_id' => array_keys($_schools)]);
 
-        $schoolDirectionSubscriptionMapper = AbstractToolHelper::getSchoolDirectionSubscriptionMapper();
-        $schoolDirectionSubscriptionMapper->setupSubscriptions($directions);
+        $schoolDirectionLevelMapper = AbstractToolHelper::getSchoolDirectionLevelMapper();
+        $schoolDirectionLevelMapper->setupLevels($directions);
 
         foreach ($directions as $direction) {
             $school = $_schools[$direction->getSchoolId()];

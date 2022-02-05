@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace module\api\entity;
 
 use sf\phpmvc\entity\AbstractEntity;
-use sf\phpmvc\entity\UserIdTraitEntity;
+use sf\phpmvc\entity\UserTraitEntity;
 
 class UserHasSchoolRoleEntity extends AbstractEntity
 {
-    use UserIdTraitEntity;
+    use UserTraitEntity;
     use SchoolTraitEntity;
 
     /** @var int */

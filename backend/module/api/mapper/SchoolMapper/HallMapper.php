@@ -14,6 +14,9 @@ class HallMapper extends AbstractMapper
      */
     public function setupHalls(array $_schools): void
     {
+        if (empty($_schools)) {
+            return;
+        }
         /** @var HallEntity[] $halls */
         $halls = $this->fetchAll(['school_id' => array_keys($_schools)]);
 

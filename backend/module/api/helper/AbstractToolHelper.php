@@ -42,19 +42,35 @@ abstract class AbstractToolHelper extends \sf\phpmvc\helper\AbstractToolHelper
     }
 
     /**
-     * @return SchoolMapper\DirectionMapper\SubscriptionMapper
+     * @return SchoolMapper\DirectionMapper\LevelMapper
      */
-    static public function getSchoolDirectionSubscriptionMapper(): SchoolMapper\DirectionMapper\SubscriptionMapper
+    static public function getSchoolDirectionLevelMapper(): SchoolMapper\DirectionMapper\LevelMapper
     {
-        return AbstractDb::getMapper(SchoolMapper\DirectionMapper\SubscriptionMapper::class);
+        return AbstractDb::getMapper(SchoolMapper\DirectionMapper\LevelMapper::class);
     }
 
     /**
-     * @return SchoolMapper\DirectionMapper\SubscriptionMapper\HasUserMapper
+     * @return SchoolMapper\DirectionMapper\LevelMapper\PriceMapper
      */
-    static public function getSchoolDirectionSubscriptionHasUserMapper(): SchoolMapper\DirectionMapper\SubscriptionMapper\HasUserMapper
+    static public function getSchoolDirectionLevelPriceMapper(): SchoolMapper\DirectionMapper\LevelMapper\PriceMapper
     {
-        return AbstractDb::getMapper(SchoolMapper\DirectionMapper\SubscriptionMapper\HasUserMapper::class);
+        return AbstractDb::getMapper(SchoolMapper\DirectionMapper\LevelMapper\PriceMapper::class);
+    }
+
+    /**
+     * @return SchoolMapper\DirectionMapper\LevelMapper\PriceMapper\StudentMapper
+     */
+    static public function getSchoolDirectionLevelPriceStudentMapper(): SchoolMapper\DirectionMapper\LevelMapper\PriceMapper\StudentMapper
+    {
+        return AbstractDb::getMapper(SchoolMapper\DirectionMapper\LevelMapper\PriceMapper\StudentMapper::class);
+    }
+
+    /**
+     * @return SchoolMapper\DirectionMapper\LevelMapper\TeacherMapper
+     */
+    static public function getSchoolDirectionLevelTeacherMapper(): SchoolMapper\DirectionMapper\LevelMapper\TeacherMapper
+    {
+        return AbstractDb::getMapper(SchoolMapper\DirectionMapper\LevelMapper\TeacherMapper::class);
     }
 
     /**
