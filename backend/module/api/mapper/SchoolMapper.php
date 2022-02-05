@@ -31,8 +31,6 @@ class SchoolMapper extends AbstractMapper
     public function getSchoolListByAdmin(int $_userId): array
     {
         $schoolRoleMapper        = AbstractToolHelper::getSchoolRoleMapper();
-        $schoolHallMapper        = AbstractToolHelper::getSchoolHallMapper();
-        $schoolDirectionMapper   = AbstractToolHelper::getSchoolDirectionMapper();
         $userHasSchoolRoleMapper = AbstractToolHelper::getUserHasSchoolRoleMapper();
 
         $roleAdmin = $schoolRoleMapper->getRoleByType(SchoolEntity\RoleEntity::TYPE_ADMIN);
@@ -43,12 +41,23 @@ class SchoolMapper extends AbstractMapper
         }
 
         $schools = $this->fetchAll(['id' => $schoolIds]);
-
-        $schoolHallMapper->setupHalls($schools);
-        $schoolDirectionMapper->setupDirections($schools);
-        $userHasSchoolRoleMapper->setupUsers($schools);
+        $this->_setupSchool($schools);
 
         return $schools;
+    }
+
+    /**
+     * @param SchoolEntity[] $_schools
+     */
+    private function _setupSchool(array $_schools): void
+    {
+        $schoolHallMapper        = AbstractToolHelper::getSchoolHallMapper();
+        $schoolDirectionMapper   = AbstractToolHelper::getSchoolDirectionMapper();
+        $userHasSchoolRoleMapper = AbstractToolHelper::getUserHasSchoolRoleMapper();
+
+        $schoolHallMapper->setupHalls($_schools);
+        $schoolDirectionMapper->setupDirections($_schools);
+        $userHasSchoolRoleMapper->setupUsers($_schools);
     }
 
     /**

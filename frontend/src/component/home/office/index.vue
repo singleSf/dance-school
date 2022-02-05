@@ -1,10 +1,11 @@
 <template lang="pug">
-Tabs(
-    :tabs="tabs"
-)
-.office(v-if="isReady")
-    h1.title {{Page.meta.title}}
-    router-view
+template(v-if="isReady")
+    Tabs(
+        :tabs="tabs"
+    )
+    .office
+        h1.title {{Page.meta.title}}
+        router-view
 </template>
 
 <style lang="stylus" scoped>

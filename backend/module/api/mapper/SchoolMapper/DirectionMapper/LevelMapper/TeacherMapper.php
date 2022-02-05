@@ -20,14 +20,15 @@ class TeacherMapper extends AbstractMapper
         /** @var LevelEntity\TeacherEntity[] $teachers */
         $teachers = $this->fetchAll(['school_direction_level_id' => array_keys($_levels)]);
 
+        if (empty($teachers)) {
+            return;
+        }
+
         $userIds = [];
         foreach ($teachers as $teacher) {
             $userIds[$teacher->getUserId()] = $teacher->getUserId();
         }
 
-        if (empty($userIds)) {
-            return;
-        }
         $userMapper = AbstractToolHelper::getUserMapper();
         $users      = $userMapper->fetchAll(['id' => $userIds]);
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace module\api\entity\SchoolEntity\DirectionEntity\LevelEntity;
 
+use module\api\entity\SchoolEntity\DirectionEntity\LevelEntity\PriceEntity\StudentEntity;
 use sf\phpmvc\entity\AbstractEntity;
 
 class PriceEntity extends AbstractEntity
@@ -18,6 +19,9 @@ class PriceEntity extends AbstractEntity
 
     /** @var int */
     protected $price;
+
+    /** @var StudentEntity[] */
+    private $students = [];
 
     /**
      * @return int
@@ -81,5 +85,29 @@ class PriceEntity extends AbstractEntity
     public function setPrice(int $_price): void
     {
         $this->price = $_price;
+    }
+
+    /**
+     * @return StudentEntity[]
+     */
+    public function getStudents(): array
+    {
+        return $this->students;
+    }
+
+    /**
+     * @param StudentEntity[] $_students
+     */
+    public function setStudents(array $_students): void
+    {
+        $this->students = $_students;
+    }
+
+    /**
+     * @param StudentEntity $_student
+     */
+    public function addStudent(StudentEntity $_student): void
+    {
+        $this->students[$_student->getId()] = $_student;
     }
 }

@@ -22,10 +22,9 @@
         .content {{school.count.admin}}
     .count
         .label Абонементы:
-        .content {{school.count.level}}
+        .content {{school.count.subscription}}
 
 </template>
-<!--todo SF Абонементы-->
 
 <style lang="stylus" scoped>
 .row
