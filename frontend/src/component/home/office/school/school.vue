@@ -12,8 +12,8 @@
         .label Направления:
         .content {{school.count.direction}}
     .count
-        .label Ученики:
-        .content {{school.count.student}}
+        .label Участники:
+        .content {{school.count.participant}}
     .count
         .label Преподаватели:
         .content {{school.count.teacher}}

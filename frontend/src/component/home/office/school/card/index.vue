@@ -7,7 +7,7 @@
     .item
         h3.title Направления ({{school.count.direction}})
     .item
-        h3.title Ученики ({{school.count.student}})
+        h3.title Участники ({{school.count.participant}})
     .item
         h3.title Преподаватели ({{school.count.teacher}})
     .item
