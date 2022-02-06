@@ -68,6 +68,6 @@ export default [
         meta     : {
             title: 'Страница не найдена!',
         },
-        component: () => import('@component/home/index'),
+        component: () => import('@component/not-found/index'),
     },
 ];

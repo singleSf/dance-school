@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+setlocale(LC_ALL, 'en_US.UTF-8');
+
 use sf\phpmvc\controller\ResponseController;
 use sf\phpmvc\helper\AbstractToolHelper;
 

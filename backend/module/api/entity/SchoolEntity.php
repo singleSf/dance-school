@@ -5,6 +5,7 @@ namespace module\api\entity;
 
 use module\api\entity\SchoolEntity\DirectionEntity;
 use module\api\entity\SchoolEntity\HallEntity;
+use module\api\entity\SchoolEntity\HasFileEntity;
 use module\api\entity\SchoolEntity\RoleEntity;
 use sf\phpmvc\entity\AbstractEntity;
 use sf\phpmvc\entity\TitleTraitEntity;
@@ -23,6 +24,9 @@ class SchoolEntity extends AbstractEntity
     /** @var UserEntity[][] */
     private $users = [];
 
+    /** @var HasFileEntity[] */
+    private $files = [];
+
     /**
      * SchoolEntity constructor.
      */
@@ -40,14 +44,6 @@ class SchoolEntity extends AbstractEntity
     }
 
     /**
-     * @param HallEntity[] $_halls
-     */
-    public function setHalls(array $_halls): void
-    {
-        $this->halls = $_halls;
-    }
-
-    /**
      * @param HallEntity $_hall
      */
     public function addHall(HallEntity $_hall): void
@@ -61,14 +57,6 @@ class SchoolEntity extends AbstractEntity
     public function getDirections(): array
     {
         return $this->directions;
-    }
-
-    /**
-     * @param DirectionEntity[] $_directions
-     */
-    public function setDirections(array $_directions): void
-    {
-        $this->directions = $_directions;
     }
 
     /**
@@ -93,6 +81,22 @@ class SchoolEntity extends AbstractEntity
     public function addUser(UserEntity $_user, int $_type): void
     {
         $this->users[$_type][$_user->getId()] = $_user;
+    }
+
+    /**
+     * @param HasFileEntity $_file
+     */
+    public function addFile(HasFileEntity $_file): void
+    {
+        $this->files[$_file->getId()] = $_file;
+    }
+
+    /**
+     * @return HasFileEntity[]
+     */
+    public function getFiles(): array
+    {
+        return $this->files;
     }
 
     /**

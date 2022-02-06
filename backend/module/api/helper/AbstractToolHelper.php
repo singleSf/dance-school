@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace module\api\helper;
 
+use module\api\mapper\FileMapper;
 use module\api\mapper\SchoolMapper;
 use module\api\mapper\UserHasSchoolRoleMapper;
 use sf\phpmvc\mapper\AbstractDb;
@@ -10,12 +11,29 @@ use sf\phpmvc\mapper\AbstractDb;
 abstract class AbstractToolHelper extends \sf\phpmvc\helper\AbstractToolHelper
 {
     /**
+     * @return FileMapper
+     */
+    static public function getFileMapper(): FileMapper
+    {
+        return AbstractDb::getMapper(FileMapper::class);
+    }
+
+    /**
      * @return SchoolMapper
      */
     static public function getSchoolMapper(): SchoolMapper
     {
         return AbstractDb::getMapper(SchoolMapper::class);
     }
+
+    /**
+     * @return SchoolMapper\HasFileMapper
+     */
+    static public function getSchoolHasFileMapper(): SchoolMapper\HasFileMapper
+    {
+        return AbstractDb::getMapper(SchoolMapper\HasFileMapper::class);
+    }
+
 
     /**
      * @return SchoolMapper\RoleMapper

@@ -54,10 +54,12 @@ class SchoolMapper extends AbstractMapper
         $schoolHallMapper        = AbstractToolHelper::getSchoolHallMapper();
         $schoolDirectionMapper   = AbstractToolHelper::getSchoolDirectionMapper();
         $userHasSchoolRoleMapper = AbstractToolHelper::getUserHasSchoolRoleMapper();
+        $schoolHasFileMapper     = AbstractToolHelper::getSchoolHasFileMapper();
 
         $schoolHallMapper->setupHalls($_schools);
         $schoolDirectionMapper->setupDirections($_schools);
         $userHasSchoolRoleMapper->setupUsers($_schools);
+        $schoolHasFileMapper->setupFiles($_schools);
     }
 
     /**
@@ -73,6 +75,12 @@ class SchoolMapper extends AbstractMapper
      */
     public function deleteSchool(SchoolEntity $_school): void
     {
+        $fileMapper = AbstractToolHelper::getFileMapper();
+
+        foreach ($_school->getFiles() as $has) {
+            $fileMapper->deleteFile($has->getFile());
+        }
+
         $this->deleteEntity($_school);
     }
 }

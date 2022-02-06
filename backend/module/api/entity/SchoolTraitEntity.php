@@ -25,6 +25,8 @@ trait SchoolTraitEntity
     public function setSchool(SchoolEntity $_school): void
     {
         $this->school = $_school;
+
+        $this->setSchoolId($_school->getId());
     }
 
     /**

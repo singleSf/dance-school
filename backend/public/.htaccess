@@ -21,7 +21,7 @@ php_flag allow_url_include Off
 ######################
 RewriteEngine On
 RewriteRule ^favicon.ico$ /asset/icon/favicon.ico [R=301,L]
-RewriteCond %{REQUEST_URI} !^/(asset|css|js)/.*$
+RewriteCond %{REQUEST_URI} !^/(asset|css|js|user-file)/.*$
 RewriteRule / index.php [QSA,L]
 ######################
 SetEnvIfNoCase User-Agent ^$ bad_bot

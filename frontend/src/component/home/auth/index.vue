@@ -8,7 +8,7 @@ AppFormForm.form(
         v-model:model="form.login"
         :isRequired="true"
         :min="6"
-    ) Ваш логин
+    )
     AppFormInput.input(
         type="password"
         placeholder="Пароль"
