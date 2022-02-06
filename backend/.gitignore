@@ -3,4 +3,4 @@
 vendor
 config/*.json
 log/*.log
-data/user-files
+data/user-file
