@@ -1,5 +1,5 @@
 <template lang="pug">
-ul.tab-list
+.tab-list
     Tab(
         v-for="tab in tabs"
         :key="tab.id"
@@ -9,11 +9,12 @@ ul.tab-list
 
 <style lang="stylus" scoped>
 .tab-list
-    display flex
-    justify-content space-between
-    margin-top 5px
+    display grid
+    padding-top 5px
     background-color var(--body-background-color-default)
-
+    text-align center
+    grid-template-columns repeat(4, 1fr)
+    grid-gap 1em
 </style>
 
 <script>

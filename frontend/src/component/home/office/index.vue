@@ -10,7 +10,10 @@ template(v-if="isReady")
 
 <style lang="stylus" scoped>
 .office
-    padding 25px
+    padding 25px 0
+
+    @media $media.tablet.small
+        padding 25px
 
     h1.title
         margin-bottom 25px

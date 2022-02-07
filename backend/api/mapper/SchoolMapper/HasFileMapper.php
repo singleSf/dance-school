@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace api\mapper\SchoolMapper;
 
-use api\entity\FileEntity;
 use api\entity\SchoolEntity;
 use api\helper\AbstractToolHelper;
+use sf\phpmvc\entity\FileEntity;
 use sf\phpmvc\mapper\AbstractMapper;
 
 class HasFileMapper extends AbstractMapper

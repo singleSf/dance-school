@@ -6,6 +6,7 @@ namespace api\mapper;
 use api\entity\SchoolEntity;
 use api\helper\AbstractToolHelper;
 use sf\phpmvc\mapper\AbstractMapper;
+use sf\phpmvc\service\FileService;
 
 class SchoolMapper extends AbstractMapper
 {
@@ -75,10 +76,8 @@ class SchoolMapper extends AbstractMapper
      */
     public function deleteSchool(SchoolEntity $_school): void
     {
-        $fileMapper = AbstractToolHelper::getFileMapper();
-
         foreach ($_school->getFiles() as $has) {
-            $fileMapper->deleteFile($has->getFile());
+            FileService::deleteFile($has->getFile());
         }
 
         $this->deleteEntity($_school);

@@ -35,6 +35,9 @@
   "zIndexNormalize"       : 1,
   "sortOrder"             : "grouped",
   "customProperties"      : [
-    "gap"
+    "gap",
+    "grid-gap",
+    "grid-column-gap",
+    "grid-row-gap"
   ]
 }

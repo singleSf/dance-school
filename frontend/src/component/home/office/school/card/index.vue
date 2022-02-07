@@ -3,28 +3,46 @@
     Info.item(
         :school="school"
         :rules="rules"
+        @save="saveSchool"
+        @remove="removeSchool()"
     )
-    .item
-        h3.title Направления ({{school.count.direction}})
-    .item
-        h3.title Участники ({{school.count.participant}})
-    .item
-        h3.title Преподаватели ({{school.count.teacher}})
-    .item
-        h3.title Администраторы ({{school.count.admin}})
-    .item
-        h3.title Абонементы ({{school.count.subscription}})
+    Subscription.item(
+        :school="school"
+        @save="saveSchool()"
+    )
+    Participant.item(
+        :school="school"
+        @save="saveSchool()"
+    )
+    Direction.item(
+        :school="school"
+        @save="saveSchool()"
+    )
+    Teacher.item(
+        :school="school"
+        @save="saveSchool()"
+    )
+    Admin.item(
+        :school="school"
+        @save="saveSchool()"
+    )
 </template>
 
 <style lang="stylus" scoped>
 .school
-    display flex
-    flex-wrap wrap
-    gap 15px
+    display grid
+    grid-template-columns repeat(4, 1fr)
+    grid-gap 1em
+
+    @media $media.tablet.small
+        grid-template-columns repeat(4, 100%)
 
     .item
         padding 15px
         border-decoration(var(--component-global-paginator-border-color), var(--component-global-paginator-border-radius))
+
+        @media $media.tablet.small
+            grid-column 1 / 1
 
         ::v-deep()
             h3.title
@@ -40,11 +58,21 @@
 <script>
 'use strict';
 
-import Info from './info';
+import Info         from './info';
+import Direction    from './direction';
+import Participant  from './participant';
+import Teacher      from './teacher';
+import Admin        from './admin';
+import Subscription from './subscription';
 
 export default {
     components: {
         Info,
+        Direction,
+        Participant,
+        Teacher,
+        Admin,
+        Subscription,
     },
     props     : {
         id: {
@@ -79,20 +107,19 @@ export default {
                     this.Page.meta.setTitle(this.school.title);
                 });
         },
-        saveSchool() {
-            const data  = {
+        saveSchool(_files) {
+            const data = {
                 school: this.school,
             };
-            const files = {};
-            /*
-                        this.Iterable.each(this.files, (_file, _key) => {
-                            if (_file) {
-                                files[_key] = _file;
 
-                                this.files[_key] = null;
-                            }
-                        });
-            */
+            const files = {};
+            if (_files) {
+                this.Iterable.each(_files, (_file, _key) => {
+                    if (_file) {
+                        files[_key] = _file;
+                    }
+                });
+            }
             this.Http
                 .request(this.Router.uri.school.save, data, files)
                 .then(this.refreshSchool);

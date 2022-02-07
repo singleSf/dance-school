@@ -3,29 +3,29 @@
     h3.title Основная информация о школе
     .content
         .row.image-list
-            .image-item.is-logo
+            .item
                 img.image(
                     :src="logoFile.file.uri"
                     alt="logo"
                 )
                 AppFormInput(
                     type="file"
-                    placeholder="Логотип"
+                    placeholder="Выбрать новый логотип"
                     v-model:model="files.logo"
-                    :max="rules.files.image.size"
-                    :extensions="rules.files.image.extensions"
+                    :max="rules.file.image.size"
+                    :extensions="rules.file.image.extensions"
                 )
-            .image-item.is-subscription
+            .item
                 img.image(
                     :src="subscriptionFile.file.uri"
                     alt="subscription"
                 )
                 AppFormInput(
                     type="file"
-                    placeholder="Абонемент"
+                    placeholder="Выбрать новый вид абонемента"
                     v-model:model="files.subscription"
-                    :max="rules.files.image.size"
-                    :extensions="rules.files.image.extensions"
+                    :max="rules.file.image.size"
+                    :extensions="rules.file.image.extensions"
                 )
         .row
             .label Название школы
@@ -33,7 +33,7 @@
                 type="text"
                 placeholder="Название школы"
                 v-model:model="school.title"
-                :isRequired="true"
+                :isRequire="true"
                 :min="3"
                 @change="saveSchool()"
             )
@@ -43,7 +43,7 @@
 
 <style lang="stylus" scoped>
 .info
-    flex-basis 500px
+    grid-column 1 / 2
 
     @media $media.tablet.small
         flex-basis 100%
@@ -54,32 +54,17 @@
                 display flex
                 flex-wrap wrap
                 justify-content space-around
-                gap 25px
+                gap 2em
 
-                .image-item
+                .item
                     display flex
+                    flex-basis 100%
                     flex-direction column
                     justify-content flex-end
                     align-items center
 
-                    &.is-logo
-                        flex-basis calc(40% - 25px / 2)
-
-                    &.is-subscription
-                        flex-basis calc(60% - 25px / 2)
-
-                    @media $media.tablet.small
-                        flex-basis 100%
-
-                        .image
-                            max-width 100%
-
-                    ::v-deep()
-                        .input
-                            width auto
-
                     .image
-                        max-width 200px
+                        max-width 100%
                         max-height 150px
 
             .remove-school
@@ -105,7 +90,7 @@ export default {
             required: true,
         },
     },
-    emits   : ['save'],
+    emits   : ['save', 'remove'],
     data() {
         return {
             files: {
@@ -115,7 +100,7 @@ export default {
         };
     },
     created() {
-        watch(() => this.files, this.saveSchool, {deep: true});
+        watch(this.files, this.saveSchool, {deep: true});
     },
     computed: {
         logoFile() {
@@ -128,6 +113,9 @@ export default {
     methods : {
         saveSchool() {
             this.$emit('save', this.files);
+        },
+        removeSchool() {
+            this.$emit('remove');
         },
     },
 };

@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace api\entity\SchoolEntity;
 
-use api\entity\FileTraitEntity;
 use api\entity\SchoolTraitEntity;
 use sf\phpmvc\entity\AbstractEntity;
+use sf\phpmvc\entity\FileTraitEntity;
 use sf\phpmvc\entity\TypeTraitEntity;
 
 class HasFileEntity extends AbstractEntity

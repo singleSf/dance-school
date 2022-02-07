@@ -6,14 +6,14 @@ AppFormForm.form(
         type="text"
         placeholder="Логин"
         v-model:model="form.login"
-        :isRequired="true"
+        :isRequire="true"
         :min="6"
     )
     AppFormInput.input(
         type="password"
         placeholder="Пароль"
         v-model:model="form.password"
-        :isRequired="true"
+        :isRequire="true"
         :min="6"
     )
     AppFormButtonSubmit.submit(

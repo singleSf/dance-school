@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace api\controller;
 
-use api\entity\FileEntity;
 use api\entity\SchoolEntity;
 use api\helper\AbstractToolHelper;
+use sf\phpmvc\entity\FileEntity;
 use sf\phpmvc\mapper\AbstractMapper;
 use sf\phpmvc\service\FileService;
 
@@ -193,15 +193,11 @@ class SchoolController extends AbstractController
                 $result['success'] = true;
                 $result['school']  = $schoolArray;
 
-                // todo SF
                 $result['rules'] = [
-                    'files' => [
+                    'file' => [
                         'image' => [
-                            'extensions' => [
-                                'jpg',
-                                'png',
-                            ],
-                            'size'       => 1024 * 1024,
+                            'extensions' => FileService::EXTENSION_IMAGE,
+                            'size'       => FileService::MAX_SIZE,
                         ],
                     ],
                 ];
@@ -222,7 +218,10 @@ class SchoolController extends AbstractController
      */
     public function savePOSTAction(array $_get, array $_post, array $_files): array
     {
-        $user = AbstractToolHelper::getAuthUserService()->getUser();
+        $result = [
+            'success' => true,
+        ];
+        $user   = AbstractToolHelper::getAuthUserService()->getUser();
 
         $schoolMapper            = AbstractToolHelper::getSchoolMapper();
         $schoolRoleMapper        = AbstractToolHelper::getSchoolRoleMapper();
@@ -248,7 +247,7 @@ class SchoolController extends AbstractController
                 if (!empty($_files['logo'])) {
                     foreach ($school->getFiles() as $has) {
                         if ($has->isLogo()) {
-                            $fileMapper->deleteFile($has->getFile());
+                            FileService::deleteFile($has->getFile());
 
                             $file = new FileEntity();
                             $file->setTitle(FileService::getName($_files['logo']['name']));
@@ -271,7 +270,7 @@ class SchoolController extends AbstractController
                 if (!empty($_files['subscription'])) {
                     foreach ($school->getFiles() as $has) {
                         if ($has->isSubscription()) {
-                            $fileMapper->deleteFile($has->getFile());
+                            FileService::deleteFile($has->getFile());
 
                             $file = new FileEntity();
                             $file->setTitle(FileService::getName($_files['subscription']['name']));
@@ -313,7 +312,7 @@ class SchoolController extends AbstractController
                     copy($path, $file->getPath());
                 }
                 {
-                    $path = ROOT_PATH.'/data/image/default/subscription.jpeg';
+                    $path = ROOT_PATH.'/data/image/default/subscription.png';
                     $file = new FileEntity();
                     $file->setTitle(FileService::getName($path));
                     $file->setExtension(FileService::getExtension($path));
@@ -329,12 +328,14 @@ class SchoolController extends AbstractController
                     copy($path, $file->getPath());
                 }
             }
+
+            $result['school'] = [
+                'id' => $school->getId(),
+            ];
         } else {
             $schoolMapper->deleteSchool($school);
         }
 
-        return [
-            'success' => true,
-        ];
+        return $result;
     }
 }

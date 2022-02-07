@@ -15,6 +15,7 @@
             v-for="school in list"
             :key="school.id"
             :school="school"
+            @click="toSchool(school)"
         )
 
     .create-school
@@ -89,7 +90,17 @@ export default {
 
             this.Http
                 .request(this.Router.uri.school.save, data)
-                .then(this.refreshList);
+                .then((_json) => {
+                    this.toSchool(_json.school);
+                });
+        },
+        toSchool(_school) {
+            const route  = this.Iterable.clone(this.Router.routes.home.office.schoolCard);
+            route.params = {
+                id: _school.id,
+            };
+
+            this.$router.push(route);
         },
     },
 };

@@ -1,5 +1,5 @@
 <template lang="pug">
-.row(@click="toSchool()")
+.row
     .id
         .label #
         .content {{school.id}}
@@ -61,21 +61,6 @@ export default {
         school: {
             type    : Object,
             required: true,
-        },
-    },
-    computed: {
-        uri() {
-            const route  = this.Iterable.clone(this.Router.routes.home.office.schoolCard);
-            route.params = {
-                id: this.school.id,
-            };
-
-            return route;
-        },
-    },
-    methods : {
-        toSchool() {
-            this.$router.push(this.uri);
         },
     },
 };
