@@ -10,7 +10,7 @@
 <style lang="stylus" scoped>
 .tab-list
     display grid
-    padding-top 5px
+    padding-top 0.25em
     background-color var(--body-background-color-default)
     text-align center
     grid-template-columns repeat(4, 1fr)

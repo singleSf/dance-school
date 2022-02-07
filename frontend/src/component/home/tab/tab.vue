@@ -7,7 +7,7 @@ router-link.tab(
 <style lang="stylus" scoped>
 .tab
     display block
-    padding 5px
+    padding 0.25em
     background-color var(--background-color-tab)
     border-decoration(var(--component-global-paginator-border-color), var(--component-global-paginator-border-radius))
 

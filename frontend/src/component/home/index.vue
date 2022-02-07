@@ -1,12 +1,18 @@
 <template lang="pug">
 AppFlashMessenger
 
-main
+main.main
     router-view
 </template>
 
 <style lang="stylus" scoped>
 @import '../../style/app.styl'
+
+.main
+    padding 0.25em 0
+
+    @media $media.tablet.big
+        padding 0.25em 1.5em
 </style>
 
 <script>

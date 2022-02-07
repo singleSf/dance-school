@@ -38,7 +38,7 @@
         grid-template-columns repeat(4, 100%)
 
     .item
-        padding 15px
+        padding 1em
         border-decoration(var(--component-global-paginator-border-color), var(--component-global-paginator-border-radius))
 
         @media $media.tablet.small
@@ -46,24 +46,24 @@
 
         ::v-deep()
             h3.title
-                margin-bottom 15px
+                margin-bottom 1em
                 text-align center
                 font-weight 400
 
             .content
                 .row
-                    margin-top 15px
+                    margin-top 2em
 </style>
 
 <script>
 'use strict';
 
-import Info         from './info';
-import Direction    from './direction';
-import Participant  from './participant';
-import Teacher      from './teacher';
-import Admin        from './admin';
-import Subscription from './subscription';
+import Info         from './info/index';
+import Direction    from './direction/index';
+import Participant  from './participant/index';
+import Teacher      from './teacher/index';
+import Admin        from './admin/index';
+import Subscription from './subscription/index';
 
 export default {
     components: {

@@ -68,7 +68,7 @@
                         max-height 150px
 
             .remove-school
-                margin-top 50px
+                margin-top 5em
                 color var(--link-color)
                 font-size 12px
                 cursor pointer

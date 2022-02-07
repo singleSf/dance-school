@@ -28,10 +28,9 @@ AppFormForm.form(
     width 300px
 
     .input
-        margin-top 5px
+        margin-bottom 0.5em
 
     .submit
-        margin-top 15px
         width 100%
 </style>
 

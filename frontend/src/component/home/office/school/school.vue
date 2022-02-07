@@ -9,20 +9,20 @@
         .label Залы:
         .content {{school.count.hall}}
     .count
-        .label Направления:
-        .content {{school.count.direction}}
+        .label Абонементы:
+        .content {{school.count.subscription}}
     .count
         .label Участники:
         .content {{school.count.participant}}
+    .count
+        .label Направления:
+        .content {{school.count.direction}}
     .count
         .label Преподаватели:
         .content {{school.count.teacher}}
     .count
         .label Администраторы:
         .content {{school.count.admin}}
-    .count
-        .label Абонементы:
-        .content {{school.count.subscription}}
 
 </template>
 
@@ -37,18 +37,19 @@
     @media $media.tablet.small
         .id, .title, .count
             display flex
-            flex-basis 50%
+            justify-content space-between
+            flex-basis 40%
             text-align left
 
             .label
                 display block
-                margin-right 15px
 
         .id
             display none
 
         .title
             flex-basis 100%
+            margin-bottom 0.5em
             font-weight 700
 
 </style>
@@ -57,7 +58,7 @@
 'use strict';
 
 export default {
-    props   : {
+    props: {
         school: {
             type    : Object,
             required: true,

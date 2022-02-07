@@ -5,11 +5,11 @@
             .id #
             .title Название школы
             .count(v-if="false") Залы
+            .count Абонементы
+            .count Участники
             .count Направления
-            .count Ученики
             .count Преподаватели
             .count Администраторы
-            .count Абонементы
     .list.body
         SchoolComponent(
             v-for="school in list"
@@ -36,7 +36,7 @@
             .row
                 display flex
                 justify-content space-between
-                padding 10px 0
+                padding 0.5em 0
 
                 @media $media.tablet.small
                     flex-wrap wrap
@@ -53,7 +53,7 @@
                         text-align center
 
     .create-school
-        margin-top 15px
+        margin-top 1em
 </style>
 
 <script>
