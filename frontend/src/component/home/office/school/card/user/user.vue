@@ -25,13 +25,13 @@
     justify-content space-between
 
     .icon
-        flex-basis 30px
+        flex-basis 25px
 
     .id
         flex-basis 30px
 
     .title
-        flex-basis calc(100% - 30px - 30px * 3)
+        flex-basis calc(100% - 30px - 25px * 3)
 </style>
 
 <script>

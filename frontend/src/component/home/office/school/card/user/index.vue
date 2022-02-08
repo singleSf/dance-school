@@ -9,42 +9,42 @@
         )
 
     .content.create-new-user(v-if="newUser.isOpen")
-        .row.danger
-            div Создайте учетную запись пользователя, которого еще нет ни в одной школе.
-            div Иначе, воспользуйтесь поиском и закрепите за ним роли в своей школе.
         .row
             AppFormInput.search(
                 type="search"
-                placeholder="ФИО нового пользователя"
+                placeholder="ФИ нового пользователя"
                 v-model:model="newUser.title"
-                :min="20"
             )
+            .similar-list(v-if="!isEmptySimilarUsers")
+                .title Возможно, этот пользователь уже существует?
+                User(
+                    v-for="user in similarUsers"
+                    :key="user.id"
+                    :user="user"
+                )
         .row.role-list
-            .role
+            .role(@click="toggleAdminUser()")
                 AppFontAwesomeIcon.icon.is-admin(
                     title="Администратор"
                     size="2x"
                     :icon="['fas', 'user-cog']"
                     :class="newUserAdminClasses"
-                    @click="toggleAdminUser()"
                 )
                 .title Администратор
-            .role
+            .role(@click="toggleTeacherUser()")
                 AppFontAwesomeIcon.icon.is-teacher(
                     title="Преподаватель"
                     size="2x"
                     :class="newUserTeacherClasses"
                     :icon="['fas', 'user-graduate']"
-                    @click="toggleTeacherUser()"
                 )
                 .title Преподаватель
-            .role
+            .role(@click="toggleStudentUser()")
                 AppFontAwesomeIcon.icon.is-student(
                     title="Ученик"
                     size="2x"
                     :class="newUserStudentClasses"
                     :icon="['fas', 'user']"
-                    @click="toggleStudentUser()"
                 )
                 .title Ученик
         .row.button-list
@@ -53,7 +53,7 @@
                 @click="toggleCreateNewUser()"
             ) Отмена
             AppFormButtonSubmit.button(
-                :isDisabled="false"
+                :isDisabled="!isValidNewUser"
                 @click="createNewUser()"
             ) Создать
     .content(v-else)
@@ -66,7 +66,7 @@
             AppFormInput.self-user(
                 type="checkbox"
                 v-model:model="isShowSelfUser"
-            ) Показывать учеников школы
+            ) Показывать только учеников школы
         .row
             .list
                 User(
@@ -90,8 +90,11 @@
             cursor pointer
 
     .create-new-user
-        .danger
-            color red
+        .similar-list
+            font-size 0.75em
+
+            .title
+                margin 0.75em 0
 
         .role-list
             display flex
@@ -100,6 +103,7 @@
             .role
                 flex-basis 100px
                 text-align center
+                cursor pointer
                 user-select none
 
                 .title
@@ -163,8 +167,6 @@ export default {
     },
     computed  : {
         users() {
-            const sortUsers = (_userA, _userB) => _userA.title.localeCompare(_userB.title);
-
             const admins   = [];
             const teachers = [];
             const students = [];
@@ -190,15 +192,55 @@ export default {
                 }
             });
 
-            return [
-                ...admins.sort(sortUsers),
-                ...teachers.sort(sortUsers),
-                ...students.sort(sortUsers),
-                ...others.sort(sortUsers),
+            let users = [
+                ...admins.sort(this.sortUsers),
+                ...teachers.sort(this.sortUsers),
+                ...students.sort(this.sortUsers),
             ];
+
+            if (!this.isShowSelfUser) {
+                users = users.concat(others.sort(this.sortUsers));
+            }
+
+            return users;
         },
         countUsers() {
             return this.Iterable.count(this.users);
+        },
+        similarUsers() {
+            if (!this.newUser.title) {
+                return [];
+            }
+
+            const admins   = [];
+            const teachers = [];
+            const students = [];
+            const others   = [];
+            this.Iterable.each(this.school.users, (_user) => {
+                if (_user.title.toLowerCase().indexOf(this.newUser.title.toLowerCase()) === -1) {
+                    return;
+                }
+
+                if (_user.isAdmin) {
+                    admins.push(_user);
+                } else if (_user.isTeacher) {
+                    teachers.push(_user);
+                } else if (_user.isStudent) {
+                    students.push(_user);
+                } else {
+                    others.push(_user);
+                }
+            });
+
+            return [
+                ...admins.sort(this.sortUsers),
+                ...teachers.sort(this.sortUsers),
+                ...students.sort(this.sortUsers),
+                ...others.sort(this.sortUsers),
+            ];
+        },
+        isEmptySimilarUsers() {
+            return this.Iterable.isEmpty(this.similarUsers);
         },
         newUserAdminClasses() {
             return {
@@ -215,8 +257,14 @@ export default {
                 'is-active': this.newUser.isStudent,
             };
         },
+        isValidNewUser() {
+            return this.newUser.title.length >= 20 && (this.newUser.isAdmin || this.newUser.isTeacher || this.newUser.isStudent);
+        },
     },
     methods   : {
+        sortUsers(_userA, _userB) {
+            return _userA.title.localeCompare(_userB.title);
+        },
         toggleCreateNewUser() {
             this.newUser.isOpen    = !this.newUser.isOpen;
             this.newUser.title     = '';
@@ -225,7 +273,6 @@ export default {
             this.newUser.isStudent = false;
         },
         createNewUser() {
-
         },
         toggleAdminUser() {
             this.newUser.isAdmin = !this.newUser.isAdmin;
