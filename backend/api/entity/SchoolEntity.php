@@ -9,7 +9,6 @@ use api\entity\SchoolEntity\HasFileEntity;
 use api\entity\SchoolEntity\RoleEntity;
 use sf\phpmvc\entity\AbstractEntity;
 use sf\phpmvc\entity\TitleTraitEntity;
-use sf\phpmvc\entity\UserEntity;
 
 class SchoolEntity extends AbstractEntity
 {
@@ -21,26 +20,11 @@ class SchoolEntity extends AbstractEntity
     /** @var DirectionEntity[] */
     private $directions = [];
 
-    /** @var UserEntity[][] */
+    /** @var UserHasSchoolRoleEntity[] */
     private $users = [];
 
     /** @var HasFileEntity[] */
     private $files = [];
-
-    /**
-     * SchoolEntity constructor.
-     */
-    public function __construct()
-    {
-        $this->setupTypesUsers();
-    }
-
-    protected function setupTypesUsers(): void
-    {
-        foreach (RoleEntity::TYPES as $type) {
-            $this->users[$type] = [];
-        }
-    }
 
     /**
      * @return HallEntity[]
@@ -75,12 +59,19 @@ class SchoolEntity extends AbstractEntity
     }
 
     /**
-     * @param UserEntity $_user
-     * @param int        $_type
+     * @param UserHasSchoolRoleEntity $_user
      */
-    public function addUser(UserEntity $_user, int $_type): void
+    public function addUser(UserHasSchoolRoleEntity $_user): void
     {
-        $this->users[$_type][$_user->getId()] = $_user;
+        $this->users[$_user->getId()] = $_user;
+    }
+
+    /**
+     * @return UserHasSchoolRoleEntity[]
+     */
+    public function getUsers(): array
+    {
+        return $this->users;
     }
 
     /**
@@ -100,26 +91,41 @@ class SchoolEntity extends AbstractEntity
     }
 
     /**
-     * @return UserEntity[]
+     * @return UserHasSchoolRoleEntity[]
      */
-    public function getParticipants(): array
+    public function getStudents(): array
     {
-        return $this->users[RoleEntity::TYPE_PARTICIPANT];
+        return $this->_getUsers(RoleEntity::TYPE_STUDENT);
     }
 
     /**
-     * @return UserEntity[]
+     * @return UserHasSchoolRoleEntity[]
      */
     public function getTeachers(): array
     {
-        return $this->users[RoleEntity::TYPE_TEACHER];
+        return $this->_getUsers(RoleEntity::TYPE_TEACHER);
     }
 
     /**
-     * @return UserEntity[]
+     * @return UserHasSchoolRoleEntity[]
      */
     public function getAdmins(): array
     {
-        return $this->users[RoleEntity::TYPE_ADMIN];
+        return $this->_getUsers(RoleEntity::TYPE_ADMIN);
+    }
+
+    /**
+     * @param int $_type
+     *
+     * @return UserHasSchoolRoleEntity[]
+     */
+    private function _getUsers(int $_type): array
+    {
+        return array_filter(
+            $this->users,
+            function (UserHasSchoolRoleEntity $_user) use ($_type): bool {
+                return $_user->getSchoolRole()->getType() === $_type;
+            }
+        );
     }
 }

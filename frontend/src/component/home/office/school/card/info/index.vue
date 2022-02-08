@@ -1,6 +1,6 @@
 <template lang="pug">
 .info
-    h3.title Основная информация о школе
+    h3.title Основная информация
     .content
         .row.image-list
             .item
@@ -38,7 +38,7 @@
                 @change="saveSchool()"
             )
         .row
-            .remove-school(@click="removeSchool()") Удалить школу
+            PseudoLink.remove-school(@click="removeSchool()") Удалить школу
 </template>
 
 <style lang="stylus" scoped>
@@ -69,9 +69,6 @@
 
             .remove-school
                 margin-top 5em
-                color var(--link-color)
-                font-size 12px
-                cursor pointer
 </style>
 
 <script>
@@ -79,8 +76,13 @@
 
 import {watch} from 'vue';
 
+import PseudoLink from '../../../../helper/pseudo-link';
+
 export default {
-    props   : {
+    components: {
+        PseudoLink,
+    },
+    props     : {
         school: {
             type    : Object,
             required: true,
@@ -90,7 +92,7 @@ export default {
             required: true,
         },
     },
-    emits   : ['save', 'remove'],
+    emits     : ['save', 'remove'],
     data() {
         return {
             files: {
@@ -102,7 +104,7 @@ export default {
     created() {
         watch(this.files, this.saveSchool, {deep: true});
     },
-    computed: {
+    computed  : {
         logoFile() {
             return this.Iterable.findOneBy(this.school.files, {isLogo: true});
         },
@@ -110,7 +112,7 @@ export default {
             return this.Iterable.findOneBy(this.school.files, {isSubscription: true});
         },
     },
-    methods : {
+    methods   : {
         saveSchool() {
             this.$emit('save', this.files);
         },

@@ -10,19 +10,11 @@
         :school="school"
         @save="saveSchool()"
     )
-    Participant.item(
-        :school="school"
-        @save="saveSchool()"
-    )
     Direction.item(
         :school="school"
         @save="saveSchool()"
     )
-    Teacher.item(
-        :school="school"
-        @save="saveSchool()"
-    )
-    Admin.item(
+    User.item(
         :school="school"
         @save="saveSchool()"
     )
@@ -31,13 +23,16 @@
 <style lang="stylus" scoped>
 .school
     display grid
-    grid-template-columns repeat(4, 1fr)
+    grid-template-columns repeat(3, 1fr)
     grid-gap 1em
+    grid-auto-rows minmax(auto, 500px)
 
     @media $media.tablet.small
         grid-template-columns repeat(4, 100%)
+        grid-auto-rows auto
 
     .item
+        overflow-y auto
         padding 1em
         border-decoration(var(--component-global-paginator-border-color), var(--component-global-paginator-border-radius))
 
@@ -51,8 +46,8 @@
                 font-weight 400
 
             .content
-                .row
-                    margin-top 2em
+                .row:not(:first-child)
+                    margin-top 1.25em
 </style>
 
 <script>
@@ -60,18 +55,14 @@
 
 import Info         from './info/index';
 import Direction    from './direction/index';
-import Participant  from './participant/index';
-import Teacher      from './teacher/index';
-import Admin        from './admin/index';
+import User         from './user/index';
 import Subscription from './subscription/index';
 
 export default {
     components: {
         Info,
         Direction,
-        Participant,
-        Teacher,
-        Admin,
+        User,
         Subscription,
     },
     props     : {

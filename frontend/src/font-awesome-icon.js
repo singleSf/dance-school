@@ -2,9 +2,20 @@
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 
-import {faAngleDown as fasAngleDown, faAngleUp as fasAngleUp} from '@fortawesome/free-solid-svg-icons';
+import {
+    faChalkboardTeacher as fasChalkboardTeacher,
+    faUser as fasUser,
+    faUserCog as fasUserCog,
+    faUserGraduate as fasUserGraduate,
+} from '@fortawesome/free-solid-svg-icons';
+
+import {faAddressCard as farAddressCard} from '@fortawesome/free-regular-svg-icons';
 
 library.add(
-    fasAngleUp,
-    fasAngleDown,
+    fasChalkboardTeacher,
+    fasUser,
+    fasUserGraduate,
+    fasUserCog,
 );
+
+library.add(farAddressCard);

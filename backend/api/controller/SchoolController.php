@@ -7,10 +7,16 @@ use api\entity\SchoolEntity;
 use api\helper\AbstractToolHelper;
 use sf\phpmvc\entity\FileEntity;
 use sf\phpmvc\mapper\AbstractMapper;
+use sf\phpmvc\service\ConvertService;
 use sf\phpmvc\service\FileService;
 
 class SchoolController extends AbstractController
 {
+    private const DEFAULT_SCHOOL_IMAGES = [
+        SchoolEntity\HasFileEntity::TYPE_LOGO         => ROOT_PATH.'/data/image/default/logo.png',
+        SchoolEntity\HasFileEntity::TYPE_SUBSCRIPTION => ROOT_PATH.'/data/image/default/subscription.png',
+    ];
+
     /**
      * @return array
      */
@@ -33,36 +39,6 @@ class SchoolController extends AbstractController
     }
 
     /**
-     * @param SchoolEntity $_school
-     *
-     * @return array
-     */
-    private function _prepareSchool(SchoolEntity $_school): array
-    {
-        $subscriptions = 0;
-        foreach ($_school->getDirections() as $direction) {
-            foreach ($direction->getLevels() as $level) {
-                foreach ($level->getPrices() as $price) {
-                    $subscriptions += count($price->getStudents());
-                }
-            }
-        }
-
-        return [
-            'id'    => $_school->getId(),
-            'title' => $_school->getTitle(),
-            'count' => [
-                'hall'         => count($_school->getHalls()),
-                'direction'    => count($_school->getDirections()),
-                'participant'  => count($_school->getParticipants()),
-                'teacher'      => count($_school->getTeachers()),
-                'admin'        => count($_school->getAdmins()),
-                'subscription' => $subscriptions,
-            ],
-        ];
-    }
-
-    /**
      * @param array $_get
      * @param array $_post
      *
@@ -77,6 +53,7 @@ class SchoolController extends AbstractController
 
         $user = AbstractToolHelper::getAuthUserService()->getUser();
 
+        $userMapper   = AbstractToolHelper::getUserMapper();
         $schoolMapper = AbstractToolHelper::getSchoolMapper();
 
         $schoolArray = null;
@@ -84,13 +61,11 @@ class SchoolController extends AbstractController
             $school = $schoolMapper->getSchoolByAdmin($user->getId(), (int)$_post['id']);
 
             if ($school) {
-                $schoolArray                 = $this->_prepareSchool($school);
-                $schoolArray['files']        = [];
-                $schoolArray['halls']        = [];
-                $schoolArray['directions']   = [];
-                $schoolArray['participants'] = [];
-                $schoolArray['teachers']     = [];
-                $schoolArray['admins']       = [];
+                $schoolArray               = $this->_prepareSchool($school);
+                $schoolArray['files']      = [];
+                $schoolArray['halls']      = [];
+                $schoolArray['directions'] = [];
+                $schoolArray['users']      = [];
 
                 foreach ($school->getFiles() as $has) {
                     $schoolArray['files'][$has->getId()] = [
@@ -169,25 +144,25 @@ class SchoolController extends AbstractController
                     ];
                 }
 
-                foreach ($school->getParticipants() as $student) {
-                    $schoolArray['participants'][$student->getId()] = [
-                        'id'    => $student->getId(),
-                        'title' => $student->getTitle(),
+                $users = $userMapper->getActiveUsers();
+                foreach ($users as $user) {
+                    $schoolArray['users'][$user->getId()] = [
+                        'id'        => $user->getId(),
+                        'title'     => $user->getTitle(),
+                        'isStudent' => false,
+                        'isTeacher' => false,
+                        'isAdmin'   => false,
                     ];
                 }
 
-                foreach ($school->getTeachers() as $teacher) {
-                    $schoolArray['teachers'][$teacher->getId()] = [
-                        'id'    => $teacher->getId(),
-                        'title' => $teacher->getTitle(),
-                    ];
-                }
-
-                foreach ($school->getAdmins() as $admin) {
-                    $schoolArray['admins'][$admin->getId()] = [
-                        'id'    => $admin->getId(),
-                        'title' => $admin->getTitle(),
-                    ];
+                foreach ($school->getUsers() as $schoolUser) {
+                    if ($schoolUser->getSchoolRole()->isStudent()) {
+                        $schoolArray['users'][$schoolUser->getUserId()]['isStudent'] = true;
+                    } elseif ($schoolUser->getSchoolRole()->isTeacher()) {
+                        $schoolArray['users'][$schoolUser->getUserId()]['isTeacher'] = true;
+                    } elseif ($schoolUser->getSchoolRole()->isAdmin()) {
+                        $schoolArray['users'][$schoolUser->getUserId()]['isAdmin'] = true;
+                    }
                 }
 
                 $result['success'] = true;
@@ -203,7 +178,6 @@ class SchoolController extends AbstractController
                 ];
             }
         }
-
 
         return $result;
     }
@@ -244,6 +218,7 @@ class SchoolController extends AbstractController
             $schoolMapper->saveSchool($school);
 
             if ($existSchool) {
+                //todo SF
                 if (!empty($_files['logo'])) {
                     foreach ($school->getFiles() as $has) {
                         if ($has->isLogo()) {
@@ -294,38 +269,22 @@ class SchoolController extends AbstractController
                 $roleAdmin = $schoolRoleMapper->getRoleByType(SchoolEntity\RoleEntity::TYPE_ADMIN);
                 $userHasSchoolRoleMapper->saveUserHasSchoolRole($user->getId(), $school->getId(), $roleAdmin->getId());
 
-                // todo SF check size && extension
-                {
-                    $path = ROOT_PATH.'/data/image/default/logo.png';
+                foreach (self::DEFAULT_SCHOOL_IMAGES as $type => $path) {
+                    if (!$this->_checkUploadFile($path, FileService::getFullName($path))) {
+                        continue;
+                    }
                     $file = new FileEntity();
                     $file->setTitle(FileService::getName($path));
                     $file->setExtension(FileService::getExtension($path));
                     $file->setSize(FileService::getSize($path));
-                    $fileMapper->saveFile($file);
 
-                    $has = new SchoolEntity\HasFileEntity();
-                    $has->setFileId($file->getId());
-                    $has->setSchoolId($school->getId());
-                    $has->setType(SchoolEntity\HasFileEntity::TYPE_LOGO);
-                    $schoolHasFileMapper->saveHas($has);
-
-                    copy($path, $file->getPath());
-                }
-                {
-                    $path = ROOT_PATH.'/data/image/default/subscription.png';
-                    $file = new FileEntity();
-                    $file->setTitle(FileService::getName($path));
-                    $file->setExtension(FileService::getExtension($path));
-                    $file->setSize(FileService::getSize($path));
-                    $fileMapper->saveFile($file);
-
-                    $has = new SchoolEntity\HasFileEntity();
-                    $has->setFileId($file->getId());
-                    $has->setSchoolId($school->getId());
-                    $has->setType(SchoolEntity\HasFileEntity::TYPE_SUBSCRIPTION);
-                    $schoolHasFileMapper->saveHas($has);
-
-                    copy($path, $file->getPath());
+                    if (FileService::saveFile($file, $path, false)) {
+                        $has = new SchoolEntity\HasFileEntity();
+                        $has->setFileId($file->getId());
+                        $has->setSchoolId($school->getId());
+                        $has->setType($type);
+                        $schoolHasFileMapper->saveHas($has);
+                    }
                 }
             }
 
@@ -337,5 +296,62 @@ class SchoolController extends AbstractController
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $_path
+     * @param string $_name
+     *
+     * @return bool
+     */
+    private function _checkUploadFile(string $_path, string $_name): bool
+    {
+        $flashMessageService = AbstractToolHelper::getFlashMessageService();
+
+        if (!FileService::isValidUploadFileImage($_path)) {
+            $flashMessageService->addErrorMessage('Файл `'.$_name.'` не является изображением');
+        } elseif (!FileService::isValidUploadFileSize($_path)) {
+            $flashMessageService->addErrorMessage('Файл `'.$_name.'` больше '.ConvertService::size(FileService::MAX_SIZE));
+        } else {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param SchoolEntity $_school
+     *
+     * @return array
+     */
+    private function _prepareSchool(SchoolEntity $_school): array
+    {
+        $uniqueUserIds = [];
+        foreach ($_school->getUsers() as $user) {
+            $uniqueUserIds[$user->getUserId()] = $user->getUserId();
+        }
+
+        $countSubscription = 0;
+        foreach ($_school->getDirections() as $direction) {
+            foreach ($direction->getLevels() as $level) {
+                foreach ($level->getPrices() as $price) {
+                    $countSubscription += count($price->getStudents());
+                }
+            }
+        }
+
+        return [
+            'id'    => $_school->getId(),
+            'title' => $_school->getTitle(),
+            'count' => [
+                'hall'         => count($_school->getHalls()),
+                'direction'    => count($_school->getDirections()),
+                'student'      => count($_school->getStudents()),
+                'teacher'      => count($_school->getTeachers()),
+                'admin'        => count($_school->getAdmins()),
+                'user'         => count($uniqueUserIds),
+                'subscription' => $countSubscription,
+            ],
+        ];
     }
 }

@@ -20,6 +20,6 @@ export default {
             required: true,
         },
     },
-    emits: ['save', 'remove'],
+    emits: ['save'],
 };
 </script>

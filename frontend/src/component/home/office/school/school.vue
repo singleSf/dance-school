@@ -12,8 +12,8 @@
         .label Абонементы:
         .content {{school.count.subscription}}
     .count
-        .label Участники:
-        .content {{school.count.participant}}
+        .label Ученики:
+        .content {{school.count.student}}
     .count
         .label Направления:
         .content {{school.count.direction}}

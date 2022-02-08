@@ -97,7 +97,10 @@ class UserHasSchoolRoleMapper extends AbstractMapper
             $user       = $users[$has->getUserId()];
             $schoolRole = $schoolRoles[$has->getSchoolRoleId()];
 
-            $school->addUser($user, $schoolRole->getType());
+            $has->setUser($user);
+            $has->setSchoolRole($schoolRole);
+
+            $school->addUser($has);
         }
     }
 }

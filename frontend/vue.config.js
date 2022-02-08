@@ -109,7 +109,6 @@ const configPluginLinterPug = (_config) => {
                extensions: ['vue'],
            }));
 };
-// todo SF prod exclude dir
 
 module.exports = {
     filenameHashing: false,

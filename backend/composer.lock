@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:singleSf/mvc-backend.git",
-                "reference": "a32c457a0c308fdfe6594c254862f1f801c464c0"
+                "reference": "a53515c23a848592f9b576e512397d8bd2ac3eca"
             },
             "require": {
                 "ext-json": "*",
@@ -32,7 +32,7 @@
                 "MIT"
             ],
             "description": "PHP MVC",
-            "time": "2022-02-07T16:36:49+00:00"
+            "time": "2022-02-07T23:18:20+00:00"
         }
     ],
     "packages-dev": [],

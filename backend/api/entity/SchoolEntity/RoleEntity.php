@@ -13,12 +13,31 @@ class RoleEntity extends AbstractEntity
     use TitleTraitEntity;
     use ParentIdTraitEntity;
     use TypeTraitEntity;
-    public const TYPE_PARTICIPANT = 1;
-    public const TYPE_TEACHER     = 2;
+    public const TYPE_STUDENT = 1;
+    public const TYPE_TEACHER = 2;
     public const TYPE_ADMIN       = 3;
-    public const TYPES            = [
-        self::TYPE_PARTICIPANT,
-        self::TYPE_TEACHER,
-        self::TYPE_ADMIN,
-    ];
+
+    /**
+     * @return bool
+     */
+    public function isStudent(): bool
+    {
+        return $this->getType() == self::TYPE_STUDENT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTeacher(): bool
+    {
+        return $this->getType() == self::TYPE_TEACHER;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->getType() == self::TYPE_ADMIN;
+    }
 }

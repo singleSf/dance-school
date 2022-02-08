@@ -6,7 +6,7 @@
             .title Название школы
             .count(v-if="false") Залы
             .count Абонементы
-            .count Участники
+            .count Ученики
             .count Направления
             .count Преподаватели
             .count Администраторы
