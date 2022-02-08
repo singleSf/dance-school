@@ -1,12 +1,12 @@
 <template lang="pug">
-.subscription
+.subscription-list
     h3.title Абонементы ({{school.count.subscription}})
     .content
         .row test
 </template>
 
 <style lang="stylus" scoped>
-.subscription
+.subscription-list
     grid-column 2 / 4
 </style>
 

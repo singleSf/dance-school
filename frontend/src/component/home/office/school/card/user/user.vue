@@ -26,17 +26,6 @@
 
     .icon
         flex-basis 30px
-        cursor pointer
-
-        &.is-active
-            &.is-admin
-                color red
-
-            &.is-teacher
-                color orange
-
-            &.is-student
-                color #71ff42
 
     .id
         flex-basis 30px

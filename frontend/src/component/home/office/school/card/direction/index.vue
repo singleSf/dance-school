@@ -1,12 +1,12 @@
 <template lang="pug">
-.direction
+.direction-list
     h3.title Направления ({{school.count.direction}})
     .content
         .row test
 </template>
 
 <style lang="stylus" scoped>
-.direction
+.direction-list
     grid-column 1 / 3
 </style>
 
