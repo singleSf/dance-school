@@ -21,6 +21,7 @@
                     v-for="user in similarUsers"
                     :key="user.id"
                     :user="user"
+                    @save="saveUser"
                 )
         .row.role-list
             .role(@click="toggleAdminUser()")
@@ -54,7 +55,7 @@
             ) Отмена
             AppFormButtonSubmit.button(
                 :isDisabled="!isValidNewUser"
-                @click="createNewUser()"
+                @click="saveUser(newUser)"
             ) Создать
     .content(v-else)
         .row
@@ -66,13 +67,14 @@
             AppFormInput.self-user(
                 type="checkbox"
                 v-model:model="isShowSelfUser"
-            ) Показывать только учеников школы
+            ) Показывать только участников школы
         .row
             .list
                 User(
                     v-for="user in users"
                     :key="user.id"
                     :user="user"
+                    @save="saveUser"
                 )
 </template>
 
@@ -127,13 +129,13 @@
 
             &.is-active
                 &.is-admin
-                    color red
+                    color var(--color-user-role-admin)
 
                 &.is-teacher
-                    color orange
+                    color var(--color-user-role-teacher)
 
                 &.is-student
-                    color #71ff42
+                    color var(--color-user-role-student)
 </style>
 
 <script>
@@ -258,7 +260,7 @@ export default {
             };
         },
         isValidNewUser() {
-            return this.newUser.title.length >= 20 && (this.newUser.isAdmin || this.newUser.isTeacher || this.newUser.isStudent);
+            return this.newUser.title.length >= 10 && (this.newUser.isAdmin || this.newUser.isTeacher || this.newUser.isStudent);
         },
     },
     methods   : {
@@ -272,8 +274,6 @@ export default {
             this.newUser.isTeacher = false;
             this.newUser.isStudent = false;
         },
-        createNewUser() {
-        },
         toggleAdminUser() {
             this.newUser.isAdmin = !this.newUser.isAdmin;
         },
@@ -282,6 +282,18 @@ export default {
         },
         toggleStudentUser() {
             this.newUser.isStudent = !this.newUser.isStudent;
+        },
+        saveUser(_user, _changeProperties) {
+            if (this.IsType.isDefined(_user.id)) {
+                this.Iterable.each(_changeProperties, (_value, _property) => {
+                    _user[_property] = _value;
+                });
+            }
+
+            this.saveSchool();
+        },
+        saveSchool() {
+            this.$emit('save');
         },
     },
 };

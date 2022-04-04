@@ -42,7 +42,7 @@ class SchoolMapper extends AbstractMapper
         }
 
         $schools = $this->fetchAll(['id' => $schoolIds]);
-        $this->_setupSchool($schools);
+        $this->_setupSchools($schools);
 
         return $schools;
     }
@@ -50,7 +50,7 @@ class SchoolMapper extends AbstractMapper
     /**
      * @param SchoolEntity[] $_schools
      */
-    private function _setupSchool(array $_schools): void
+    private function _setupSchools(array $_schools): void
     {
         $schoolHallMapper        = AbstractToolHelper::getSchoolHallMapper();
         $schoolDirectionMapper   = AbstractToolHelper::getSchoolDirectionMapper();
@@ -66,7 +66,7 @@ class SchoolMapper extends AbstractMapper
     /**
      * @param SchoolEntity $_school
      */
-    public function saveSchool(SchoolEntity $_school): void
+    public function save(SchoolEntity $_school): void
     {
         $this->saveEntity($_school);
     }
@@ -74,10 +74,10 @@ class SchoolMapper extends AbstractMapper
     /**
      * @param SchoolEntity $_school
      */
-    public function deleteSchool(SchoolEntity $_school): void
+    public function delete(SchoolEntity $_school): void
     {
         foreach ($_school->getFiles() as $has) {
-            FileService::deleteFile($has->getFile());
+            FileService::delete($has->getFile());
         }
 
         $this->deleteEntity($_school);

@@ -15,7 +15,7 @@ class RoleEntity extends AbstractEntity
     use TypeTraitEntity;
     public const TYPE_STUDENT = 1;
     public const TYPE_TEACHER = 2;
-    public const TYPE_ADMIN       = 3;
+    public const TYPE_ADMIN   = 3;
 
     /**
      * @return bool

@@ -34,6 +34,7 @@ export default [
                 meta     : {
                     title : 'Личный кабинет',
                     isAuth: true,
+                    isMain: true,
                 },
                 component: () => import('@component/home/office/index'),
                 children : [
@@ -43,6 +44,7 @@ export default [
                         meta     : {
                             title : 'Список школ',
                             isAuth: true,
+                            isMain: false,
                         },
                         component: () => import('@component/home/office/school/index'),
                     },
@@ -52,6 +54,7 @@ export default [
                         meta     : {
                             title : 'Карточка школы',
                             isAuth: true,
+                            isMain: false,
                         },
                         props    : (_route) => ({
                             id: Number(_route.params.id),

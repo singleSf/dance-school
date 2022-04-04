@@ -98,13 +98,13 @@ export default {
                     this.Page.meta.setTitle(this.school.title);
                 });
         },
-        saveSchool(_files) {
+        saveSchool(_files = {}) {
             const data = {
                 school: this.school,
             };
 
             const files = {};
-            if (_files) {
+            if (this.Iterable.isNotEmpty(_files)) {
                 this.Iterable.each(_files, (_file, _key) => {
                     if (_file) {
                         files[_key] = _file;

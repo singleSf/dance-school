@@ -4,25 +4,28 @@ declare(strict_types=1);
 namespace api\controller;
 
 use api\helper\AbstractToolHelper;
-use RuntimeException;
-use sf\phpmvc\service\ServerService;
+use sf\phpmvc\mapper\UserMapper;
+use sf\phpmvc\service\AuthUserService;
+use sf\phpmvc\service\FlashMessageService;
 
 abstract class AbstractController extends \sf\phpmvc\controller\AbstractController
 {
-    /** @var bool */
-    protected $isCheckUserAuth = true;
+    /** @var AuthUserService */
+    protected $_authUserService;
+
+    /** @var UserMapper */
+    protected $_userMapper;
+
+    /** @var FlashMessageService */
+    protected $_flashMessageService;
 
     /**
      * AbstractController constructor.
      */
     public function __construct()
     {
-        if ($this->isCheckUserAuth) {
-            $user = ServerService::isConsole() ? null : AbstractToolHelper::getAuthUserService()->getUser();
-
-            if (!$user) {
-                throw new RuntimeException('Доступ только для авторизованных!');
-            }
-        }
+        $this->_authUserService     = AbstractToolHelper::getAuthUserService();
+        $this->_userMapper          = AbstractToolHelper::getUserMapper();
+        $this->_flashMessageService = AbstractToolHelper::getFlashMessageService();
     }
 }

@@ -4,13 +4,12 @@ declare(strict_types=1);
 namespace api\controller;
 
 use api\entity\SchoolEntity;
-use api\helper\AbstractToolHelper;
 use sf\phpmvc\entity\FileEntity;
 use sf\phpmvc\mapper\AbstractMapper;
 use sf\phpmvc\service\ConvertService;
 use sf\phpmvc\service\FileService;
 
-class SchoolController extends AbstractController
+class SchoolController extends AbstractAuthController
 {
     private const DEFAULT_SCHOOL_IMAGES = [
         SchoolEntity\HasFileEntity::TYPE_LOGO         => ROOT_PATH.'/data/image/default/logo.png',
@@ -22,10 +21,9 @@ class SchoolController extends AbstractController
      */
     public function listGETAction(): array
     {
-        $user = AbstractToolHelper::getAuthUserService()->getUser();
+        $user = $this->_authUserService->getUser();
 
-        $schoolMapper = AbstractToolHelper::getSchoolMapper();
-        $schools      = $schoolMapper->getSchoolListByAdmin($user->getId());
+        $schools = $this->_schoolMapper->getSchoolListByAdmin($user->getId());
 
         $list = [];
         foreach ($schools as $school) {
@@ -51,14 +49,11 @@ class SchoolController extends AbstractController
             'school'  => [],
         ];
 
-        $user = AbstractToolHelper::getAuthUserService()->getUser();
-
-        $userMapper   = AbstractToolHelper::getUserMapper();
-        $schoolMapper = AbstractToolHelper::getSchoolMapper();
+        $user = $this->_authUserService->getUser();
 
         $schoolArray = null;
         if (isset($_post['id'])) {
-            $school = $schoolMapper->getSchoolByAdmin($user->getId(), (int)$_post['id']);
+            $school = $this->_schoolMapper->getSchoolByAdmin($user->getId(), (int)$_post['id']);
 
             if ($school) {
                 $schoolArray               = $this->_prepareSchool($school);
@@ -101,10 +96,7 @@ class SchoolController extends AbstractController
                                     'id'        => $student->getId(),
                                     'dateStart' => $student->getDateStart()->format(AbstractMapper::DATE_FORMAT),
                                     'price'     => $student->getPrice(),
-                                    'user'      => [
-                                        'id'    => $student->getUser()->getId(),
-                                        'title' => $student->getUser()->getTitle(),
-                                    ],
+                                    'userId'    => $student->getUserId(),
                                 ];
                             }
 
@@ -120,11 +112,8 @@ class SchoolController extends AbstractController
                         $teachers = [];
                         foreach ($level->getTeachers() as $teacher) {
                             $teachers[$teacher->getId()] = [
-                                'id'   => $teacher->getId(),
-                                'user' => [
-                                    'id'    => $teacher->getUser()->getId(),
-                                    'title' => $teacher->getUser()->getTitle(),
-                                ],
+                                'id'     => $teacher->getId(),
+                                'userId' => $teacher->getUserId(),
                             ];
                         }
 
@@ -144,7 +133,7 @@ class SchoolController extends AbstractController
                     ];
                 }
 
-                $users = $userMapper->getActiveUsers();
+                $users = $this->_userMapper->getActiveUsers();
                 foreach ($users as $user) {
                     $schoolArray['users'][$user->getId()] = [
                         'id'        => $user->getId(),
@@ -195,17 +184,11 @@ class SchoolController extends AbstractController
         $result = [
             'success' => true,
         ];
-        $user   = AbstractToolHelper::getAuthUserService()->getUser();
-
-        $schoolMapper            = AbstractToolHelper::getSchoolMapper();
-        $schoolRoleMapper        = AbstractToolHelper::getSchoolRoleMapper();
-        $userHasSchoolRoleMapper = AbstractToolHelper::getUserHasSchoolRoleMapper();
-        $fileMapper              = AbstractToolHelper::getFileMapper();
-        $schoolHasFileMapper     = AbstractToolHelper::getSchoolHasFileMapper();
+        $user   = $this->_authUserService->getUser();
 
         $school = null;
         if (isset($_post['school']['id'])) {
-            $school = $schoolMapper->getSchoolByAdmin($user->getId(), (int)$_post['school']['id']);
+            $school = $this->_schoolMapper->getSchoolByAdmin($user->getId(), (int)$_post['school']['id']);
         }
         if (!$school) {
             $school = new SchoolEntity();
@@ -215,26 +198,26 @@ class SchoolController extends AbstractController
             $school->setTitle($_post['school']['title']);
             $existSchool = $school->hasId();
 
-            $schoolMapper->saveSchool($school);
+            $this->_schoolMapper->save($school);
 
             if ($existSchool) {
                 //todo SF
                 if (!empty($_files['logo'])) {
                     foreach ($school->getFiles() as $has) {
                         if ($has->isLogo()) {
-                            FileService::deleteFile($has->getFile());
+                            FileService::delete($has->getFile());
 
                             $file = new FileEntity();
                             $file->setTitle(FileService::getName($_files['logo']['name']));
                             $file->setExtension(FileService::getExtension($_files['logo']['name']));
                             $file->setSize(FileService::getSize($_files['logo']['tmp_name']));
-                            $fileMapper->saveFile($file);
+                            $this->_fileMapper->save($file);
 
                             $has = new SchoolEntity\HasFileEntity();
                             $has->setFileId($file->getId());
                             $has->setSchoolId($school->getId());
                             $has->setType(SchoolEntity\HasFileEntity::TYPE_LOGO);
-                            $schoolHasFileMapper->saveHas($has);
+                            $this->_schoolHasFileMapper->saveHas($has);
 
                             move_uploaded_file($_files['logo']['tmp_name'], $file->getPath());
 
@@ -245,19 +228,19 @@ class SchoolController extends AbstractController
                 if (!empty($_files['subscription'])) {
                     foreach ($school->getFiles() as $has) {
                         if ($has->isSubscription()) {
-                            FileService::deleteFile($has->getFile());
+                            FileService::delete($has->getFile());
 
                             $file = new FileEntity();
                             $file->setTitle(FileService::getName($_files['subscription']['name']));
                             $file->setExtension(FileService::getExtension($_files['subscription']['name']));
                             $file->setSize(FileService::getSize($_files['subscription']['tmp_name']));
-                            $fileMapper->saveFile($file);
+                            $this->_fileMapper->save($file);
 
                             $has = new SchoolEntity\HasFileEntity();
                             $has->setFileId($file->getId());
                             $has->setSchoolId($school->getId());
                             $has->setType(SchoolEntity\HasFileEntity::TYPE_SUBSCRIPTION);
-                            $schoolHasFileMapper->saveHas($has);
+                            $this->_schoolHasFileMapper->saveHas($has);
 
                             move_uploaded_file($_files['subscription']['tmp_name'], $file->getPath());
 
@@ -266,8 +249,8 @@ class SchoolController extends AbstractController
                     }
                 }
             } else {
-                $roleAdmin = $schoolRoleMapper->getRoleByType(SchoolEntity\RoleEntity::TYPE_ADMIN);
-                $userHasSchoolRoleMapper->saveUserHasSchoolRole($user->getId(), $school->getId(), $roleAdmin->getId());
+                $roleAdmin = $this->_schoolRoleMapper->getRoleByType(SchoolEntity\RoleEntity::TYPE_ADMIN);
+                $this->_userHasSchoolRoleMapper->saveUserHasSchoolRole($user->getId(), $school->getId(), $roleAdmin->getId());
 
                 foreach (self::DEFAULT_SCHOOL_IMAGES as $type => $path) {
                     if (!$this->_checkUploadFile($path, FileService::getFullName($path))) {
@@ -278,12 +261,12 @@ class SchoolController extends AbstractController
                     $file->setExtension(FileService::getExtension($path));
                     $file->setSize(FileService::getSize($path));
 
-                    if (FileService::saveFile($file, $path, false)) {
+                    if (FileService::save($file, $path, false)) {
                         $has = new SchoolEntity\HasFileEntity();
                         $has->setFileId($file->getId());
                         $has->setSchoolId($school->getId());
                         $has->setType($type);
-                        $schoolHasFileMapper->saveHas($has);
+                        $this->_schoolHasFileMapper->saveHas($has);
                     }
                 }
             }
@@ -292,7 +275,7 @@ class SchoolController extends AbstractController
                 'id' => $school->getId(),
             ];
         } else {
-            $schoolMapper->deleteSchool($school);
+            $this->_schoolMapper->delete($school);
         }
 
         return $result;
@@ -306,12 +289,10 @@ class SchoolController extends AbstractController
      */
     private function _checkUploadFile(string $_path, string $_name): bool
     {
-        $flashMessageService = AbstractToolHelper::getFlashMessageService();
-
         if (!FileService::isValidUploadFileImage($_path)) {
-            $flashMessageService->addErrorMessage('Файл `'.$_name.'` не является изображением');
+            $this->_flashMessageService->addErrorMessage('Файл `'.$_name.'` не является изображением');
         } elseif (!FileService::isValidUploadFileSize($_path)) {
-            $flashMessageService->addErrorMessage('Файл `'.$_name.'` больше '.ConvertService::size(FileService::MAX_SIZE));
+            $this->_flashMessageService->addErrorMessage('Файл `'.$_name.'` больше '.ConvertService::size(FileService::MAX_SIZE));
         } else {
             return true;
         }

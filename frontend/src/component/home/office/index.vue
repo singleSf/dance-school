@@ -4,7 +4,9 @@ template(v-if="isReady")
         :tabs="tabs"
     )
     .office
-        h1.title {{Page.meta.title}}
+        h1.title
+            span(v-if="isMain") Добро пожаловать, {{User.user.title}}
+            span(v-else) {{Page.meta.title}}
         router-view
 </template>
 
@@ -18,8 +20,9 @@ template(v-if="isReady")
 <script>
 'use strict';
 
-import Tabs    from '../tab/index';
 import {unref} from 'vue';
+
+import Tabs from '../tab/index';
 
 export default {
     components: {
@@ -52,8 +55,14 @@ export default {
         };
     },
     computed  : {
+        currentRoute() {
+            return unref(this.$router.currentRoute);
+        },
         isReady() {
-            return !unref(this.$router.currentRoute).meta.isAuth || this.User.isAuth;
+            return !this.currentRoute.meta.isAuth || this.User.isAuth;
+        },
+        isMain() {
+            return this.currentRoute.meta.isMain;
         },
     },
 };

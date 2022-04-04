@@ -33,7 +33,7 @@
                 type="text"
                 placeholder="Название школы"
                 v-model:model="school.title"
-                :isRequire="true"
+                :isRequired="true"
                 :min="3"
                 @change="saveSchool()"
             )
